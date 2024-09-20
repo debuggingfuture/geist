@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import daisyui from "daisyui";
 
 // We want each package to be responsible for its own content.
 const config: Omit<Config, "content"> = {
@@ -10,6 +11,9 @@ const config: Omit<Config, "content"> = {
       },
     },
   },
-  plugins: [],
+  plugins: [daisyui],
+  daisyui: {
+    themes: ["light", "dark", "cupcake"],
+  },
 };
 export default config;
