@@ -26,8 +26,10 @@ contract ResolverTest is Test {
 
     function testResolve(uint256 x) public view {
 
-        byte
-        bool result = resolver.resolve(type(IExtendedResolver).interfaceId);
-        assertEq(result, true); // IExtendedResolver
+        string memory name = "a.eth";
+        
+        bytes memory result = resolver.resolve(bytes(name), bytes("data"));
+        // expect revert
+        // OffchainLookup
     }
 }
