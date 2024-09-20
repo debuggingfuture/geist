@@ -1,18 +1,64 @@
-# Turborepo Tailwind CSS starter
 
-This is an official starter Turborepo.
+## 🤖 Geist
 
-## Using this example
+Decentralized Autonomous Website Builder.
+DAO collaborate and vote builds, reduce trust assumptions of website deployment by introducing zk proofs and custom ENS resolver.
 
-Run the following command:
 
-```sh
-npx create-turbo@latest -e with-tailwind
+## What
+
+Today, one can build a static website that is censorship resistent, decentralized by hosting it on IPFS, with resolution handled by ens domain. Websites can be updated via IPNS wiith immutable content trails and made persistent with IPFS pinnings. Great tools such as eth.limo and fleek made such approach user friendly.
+
+
+Pairing with smart contract, we can create dApp comprised of UI and fully on-chain application states that benefit from security and governance mechanism of Ethereum.
+
+A simple example is a static website that only visualize smart contract states, in a sense it works similar as a dynamic NFT. 
+
+### Challenges of Autonomous websites
+
+
+
+### Resolver routes
+
+
+### Deployment flow
+
+```mermaid
+sequenceDiagram
+    Verifier->>Verify Build
+    Platform-> Upload IPFS
+    Platform->>Contract: set record
+    Platform-->>Contract: burn fuse
+    Client->Wildcard resolver: Request
+    Gateway->Response: Response
+    
+
 ```
 
-## What's inside?
 
-This Turborepo includes the following packages/apps:
+
+## How it works
+
+
+### References
+[ENSIP-7: Contenthash field](https://docs.ens.domains/ensip/7)
+
+[ENSIP-10: Wildcard Resolution]
+
+ERC-3668
+https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gateway-interface
+
+
+
+Brave deprecated ipfs://
+https://github.com/brave/brave-browser/issues/37735
+
+
+## Notes
+### ENS contract address - testnet
+https://docs.ens.domains/learn/deployments
+https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
+
 
 ### Apps and Packages
 
