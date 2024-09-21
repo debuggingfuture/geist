@@ -71,6 +71,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
   });
 
   useEffect(() => {
+    console.debug({ keypair, SignUpEvents });
     if (!keypair || !SignUpEvents || !SignUpEvents.length) {
       setStateIndex(null);
       return;
@@ -91,8 +92,10 @@ export default function AuthContextProvider({ children }: { children: React.Reac
       logs.forEach(log => {
         if (
           (keypair?.pubKey.asContractParam().x !== undefined &&
+            //@ts-ignore
             log.args._userPubKeyX !== BigInt(keypair?.pubKey.asContractParam().x)) ||
           (keypair?.pubKey.asContractParam().y !== undefined &&
+            //@ts-ignore
             log.args._userPubKeyY !== BigInt(keypair?.pubKey.asContractParam().y))
         )
           return;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Paginator from "~~/components/Paginator";
 import HoverBorderCard from "~~/components/card/HoverBorderCard";
@@ -18,6 +18,10 @@ export default function Polls() {
   console.log(polls);
 
   const router = useRouter();
+
+  useEffect(() => {
+    router.push("/geist-app/proposals/6");
+  }, []);
 
   return (
     <div className="container mx-auto pt-10">

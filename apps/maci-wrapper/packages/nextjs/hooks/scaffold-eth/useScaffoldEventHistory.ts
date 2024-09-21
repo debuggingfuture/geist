@@ -65,6 +65,10 @@ export const useScaffoldEventHistory = <
         throw new Error("Hook disabled");
       }
 
+      if (!publicClient) {
+        throw new Error("public client not defined");
+      }
+
       const event = (deployedContractData.abi as Abi).find(
         part => part.type === "event" && part.name === eventName,
       ) as AbiEvent;

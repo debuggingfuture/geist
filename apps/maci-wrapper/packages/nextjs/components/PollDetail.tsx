@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { genRandomSalt } from "maci-crypto";
 import { Keypair, PCommand, PubKey } from "maci-domainobjs";
-import { useContractRead, useContractWrite } from "wagmi";
+import { useReadContract, useWriteContract } from "wagmi";
 import PollAbi from "~~/abi/Poll";
 import VoteCard from "~~/components/card/VoteCard";
 import { useAuthContext } from "~~/contexts/AuthContext";
@@ -73,23 +73,14 @@ export default function PollDetail({ id }: { id: bigint }) {
     };
   }, [poll]);
 
-  const { data: coordinatorPubKeyResult } = useContractRead({
+  const { data: coordinatorPubKeyResult } = useReadContract({
     abi: PollAbi,
     address: poll?.pollContracts.poll,
     functionName: "coordinatorPubKey",
   });
 
-  const { writeAsync: publishMessage } = useContractWrite({
-    abi: PollAbi,
-    address: poll?.pollContracts.poll,
-    functionName: "publishMessage",
-  });
-
-  const { writeAsync: publishMessageBatch } = useContractWrite({
-    abi: PollAbi,
-    address: poll?.pollContracts.poll,
-    functionName: "publishMessageBatch",
-  });
+  const { writeContractAsync: publishMessage } = useWriteContract();
+  const { writeContractAsync: publishMessageBatch } = useWriteContract();
 
   const [coordinatorPubKey, setCoordinatorPubKey] = useState<PubKey>();
 
@@ -145,6 +136,9 @@ export default function PollDetail({ id }: { id: bigint }) {
     try {
       if (votesToMessage.length === 1) {
         await publishMessage({
+          abi: PollAbi,
+          address: poll?.pollContracts.poll,
+          functionName: "publishMessage",
           args: [
             votesToMessage[0].message.asContractParam() as unknown as {
               data: readonly [bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint];
@@ -154,6 +148,9 @@ export default function PollDetail({ id }: { id: bigint }) {
         });
       } else {
         await publishMessageBatch({
+          abi: PollAbi,
+          address: poll?.pollContracts.poll,
+          functionName: "publishMessageBatch",
           args: [
             votesToMessage.map(
               v =>

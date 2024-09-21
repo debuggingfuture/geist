@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
   return (
-    <html data-theme="light" lang="en">
+    <html data-theme="light" lang="en" suppressHydrationWarning>
       <body className={poppins.className} data-theme="light">
         <div className="flex flex-col min-h-screen max-w-screen">
           <Navbar />
