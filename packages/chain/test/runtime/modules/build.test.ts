@@ -3,14 +3,33 @@ import { CircuitString, Field, MerkleList, MerkleMap, MerkleMapWitness, MerkleTr
 import { Build, BuildMerkleWitness } from "../../../src/runtime/modules/build";
 import { log } from "@proto-kit/common";
 import { BalancesKey, TokenId, UInt64 } from "@proto-kit/library";
+import fs from "fs";
+import path from "path";
+import { mapCidAsPoseidon, processDirectory } from "../../../src/lib/build-proof";
+import { createFixtureFileProof, loadDirname } from "../../util";
+import { generateCID } from "../../../src/lib/cid";
 
 class MyList extends MerkleList.create(CircuitString) {}
 
-// class StringMerkleTree extends Struct(CircuitString) {}
+const __dirname = loadDirname();
 
 log.setLevel("ERROR");
 
-describe.only("build", () => {
+const sendTx = async (signer:any, appChain: any, txFx: ()=>Promise<any>)=>{
+    const tx1 = await appChain.transaction(signer, txFx);
+
+    await tx1.sign();
+    await tx1.send();
+    console.log('tx sent');
+    
+    const block = await appChain.produceBlock();
+
+    console.log('block status', block?.transactions[0].status.toBoolean())
+  
+}
+
+
+describe("build", () => {
 
   it('pure tree test', ()=>{
     
@@ -74,44 +93,86 @@ describe.only("build", () => {
 
   })
 
-  it("should demonstrate how build work", async () => {
+  it.only("should demonstrate how build work", async () => {
+
+    // setup from fixture
+    const { map, root, cidByFileKey } = await createFixtureFileProof();
+
+    console.log('root', root, map);
+
     const appChain = TestingAppChain.fromRuntime({
       Build,
     });
 
-    // appChain.configurePartial({
-    //   Runtime: {
-    //     Build: {
-    //       root: Field.from(0),
-    //       witness: Field.from(0),
-    //       // totalSupply: UInt64.from(10000),
-    //     },
-    //     // seems always included
-    //     Balances: {
-    //       totalSupply: UInt64.from(10000),
-    //     },
-    //   },
+    appChain.configurePartial({
+      Runtime: {
+        Build: {
+          root: Field.from(0),
+          witness: Field.from(0)
+        },
+        // seems always included
+        Balances: {
+          totalSupply: UInt64.from(10000),
+        },
+      },
+    });
+
+    
+    // const buildMetadata = {
+    //   routes :['/route1', '/route2'],
+    // }
+    await appChain.start();
+
+
+
+    const alicePrivateKey = PrivateKey.random();
+    const alice = alicePrivateKey.toPublicKey();
+    appChain.setSigner(alicePrivateKey);
+
+
+    const build = appChain.runtime.resolve("Build");
+
+    await sendTx(alice, appChain, async ()=>{
+      await build.init(root);
+    });
+
+
+    // setup 
+    
+    const fileKey1 = CircuitString.fromString('file1.html').hash();
+    const cidHash = map.get(fileKey1);
+    const witness = map.getWitness(fileKey1);
+
+
+    const rootLatest = await appChain.query.runtime.Build.root.get();
+
+    const [rootComputed, key] = witness.computeRootAndKeyV2(
+      cidHash   
+    );
+
+    rootComputed.assertEquals(rootLatest!);
+
+
+    await sendTx(alice, appChain, async ()=>{
+
+      await build.verifyFile(cidHash, witness);
+    });
+
+    console.log('tx sent');
+    
+
+
+      
+    // const tx = await appChain.transaction(alice, async ()=>{
+    //   await build.init(root);
     // });
 
-    // await appChain.start();
+    // await tx1.sign();
+    // await tx1.send();
+    // console.log('tx sent');
+    
+    // await appChain.produceBlock();
 
-    // const alicePrivateKey = PrivateKey.random();
-    // const alice = alicePrivateKey.toPublicKey();
-    // const tokenId = TokenId.from(0);
-
-    // appChain.setSigner(alicePrivateKey);
-
-    // const build = appChain.runtime.resolve("Build");
-
-    // console.log('build', build);
-
-
-
-    // const root = await appChain.query.runtime.Build.root.get();
-
-    const buildMetadata = {
-      routes :['/route1', '/route2'],
-    }
 
     // // // gets a plain witness for leaf at index 0n
     // const witness = await appChain.query.runtime.Build.witness.get();

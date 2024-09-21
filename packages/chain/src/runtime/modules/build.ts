@@ -3,7 +3,8 @@
 import { runtimeModule, state, runtimeMethod, RuntimeModule } from "@proto-kit/module";
 import { State, assert } from "@proto-kit/protocol";
 import { Balance,  TokenId } from "@proto-kit/library";
-import { CircuitString, Field, MerkleTree, MerkleWitness, PublicKey } from "o1js";
+import { CircuitString, Field, MerkleMapWitness, MerkleTree, MerkleWitness, PublicKey } from "o1js";
+import { mapCidAsPoseidon } from "../../lib/build-proof";
 
 const treeHeight = 8;
 // creates the corresponding MerkleWitness class that is circuit-compatible
@@ -22,25 +23,23 @@ export class Build extends RuntimeModule<BuildConfig> {
 
     @state() root = State.from<Field>(Field);
 
-    //  @state() root2 = State.from<CircuitString>(CircuitString);
-
-    // type error
-    // @state() tree = State.from<MerkleTree>(MerkleTree);
-
     @state() witness = State.from<BuildMerkleWitness>(BuildMerkleWitness);
 
 
+  /**
+   * Given a build, generated proof of routes, files etc
+   * Commit approved build on chain
+   * Only if build is aligning with it can be deployed
+   * 
+   * @param buildCommitment 
+   */
+
   @runtimeMethod()
-  public async init(
-  ): Promise<void> {
-
-
-    // this.tree.set(Tree);
-    // await this.root.set(Tree.getRoot());
-    // await this.witness.set(new BuildMerkleWitness(Tree.getWitness(0n)));
+  public async init(buildCommitment: Field): Promise<void> {
+    await this.root.set(buildCommitment);
+    console.log('root updated', buildCommitment);
   }
 
-  // fromValue
 
   @runtimeMethod()
   public async verifySignature(
@@ -48,41 +47,41 @@ export class Build extends RuntimeModule<BuildConfig> {
   ): Promise<void> {
   }
 
-  public async addBuild(buildMetadata: any){
+  @runtimeMethod()
+  public async verifyFile(cidHash: Field, mapWitness: MerkleMapWitness){
+      // we fetch the on-chain commitment
+      let root = await this.root.get();
 
-
-        // // sets a value at position 0n
-        // this.root.set() setLeaf(0n, Field(123));
-        this.root.set(Field(123));
-
-        this.root.set(Field(234));
-
-
-        // this.witness.set(new BuildMerkleWitness(Tree.getWitness(0n)));
-
-        // Tree.setLeaf(1n, String("route1"));
-
-        // this.root.set(String("route1"));
-        // // gets the current root of the tree
-        // const root = Tree.getRoot();
-
-        // // gets a plain witness for leaf at index 0n
-        // const witness = Tree.getWitness(0n);
-
-        // // creates a circuit-compatible witness
-        // const circuitWitness = new BuildMerkleWitness(witness);
-
-        // // calculates the root of the witness
-        // const calculatedRoot = circuitWitness.calculateRoot(Field(123));
-
-        // calculatedRoot.assertEquals(root);
+      const [rootComputed, key] = mapWitness.computeRootAndKeyV2(
+        cidHash
+        );
+        
+      console.log('key', key);
+      console.log('root', root.value);
+      console.log('rootComputed', rootComputed);
+      assert(rootComputed.equals(root.value), 'root not equal');
+   
   }
   
   @runtimeMethod()
   public async verifyBuild(
-    tokenId: TokenId,
   ): Promise<void> {
 
     // do something
   }
+
+
+  @runtimeMethod()
+  public async deployBuild(
+    tokenId: TokenId,
+  ): Promise<void> {
+
+    // do something
+
+    await this.verifyBuild();
+
+
+
+  }
+
 }
