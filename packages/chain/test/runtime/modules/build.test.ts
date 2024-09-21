@@ -53,15 +53,9 @@ describe.only("build", () => {
 
   it('string based merkle tree test', ()=>{
     
-
-    const treeHeight = 8;
-
-    const Tree = new MerkleTree(treeHeight);
-
     const Map = new MerkleMap();
 
     const fileKey1 = CircuitString.fromString("file1").hash();
-
     const fileContent1 = CircuitString.fromString("content1").hash();
     const fileKey2 = CircuitString.fromString("file2").hash();
     const fileContent2 = CircuitString.fromString("content2").hash();

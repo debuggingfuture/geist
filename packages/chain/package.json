@@ -24,7 +24,6 @@
     "dev": "nodemon --watch src -e ts --exec \"pnpm dev:run\"",
     "prisma:migrate": "prisma migrate deploy --schema ./node_modules/@proto-kit/persistance/prisma/schema.prisma",
     "prisma:generate": "prisma generate --schema ./node_modules/@proto-kit/persistance/prisma/schema.prisma"
-
   },
   "peerDependencies": {
     "@proto-kit/api": "*",
@@ -42,6 +41,8 @@
   "devDependencies": {
     "@jest/globals": "^29.6.1",
     "@prisma/client": "^5.7.1",
+    "@repo/tailwind-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/jest": "^29.5.7",
     "@types/node": "^20.8.10",
     "@types/react-dom": "^18.2.7",
@@ -62,14 +63,13 @@
     "string_decoder": "^1.3.0",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
-    "@repo/tailwind-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
     "typescript": "5.4.5",
     "url": "^0.11.1",
     "util": "^0.12.5",
     "yargs": "^17.7.2"
   },
   "dependencies": {
+    "multiformats": "^13.3.0",
     "reflect-metadata": "^0.1.13"
   }
 }

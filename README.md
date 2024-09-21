@@ -2,7 +2,10 @@
 ## 🤖 Geist
 
 Decentralized Autonomous Website Builder.
-DAO collaborate and vote builds, reduce trust assumptions of website deployment by introducing zk proofs and custom ENS resolver.
+Wallet whitelist for Private Previews. Trustless Deployment after proposal voting. 
+
+Make websites truely decentralize by remove trust assumptions in development & deployment, good bye to seat based pricing for collaborations. 
+Allow DAOs to have private preview on websites collaborate and vote builds, reduce trust assumptions of website deployment by introducing zk proofs and custom ENS resolver.
 
 
 ## What
