@@ -1,51 +1,46 @@
-
 ## 🤖 Geist
 
 Decentralized Autonomous Website (DAW) Builder.
-Wallet whitelist for Private Previews. Trustless Deployment after proposal voting. 
+Wallet whitelist for Private Previews. Trustless Deployment after proposal voting.
 
-Make websites truely decentralize by remove trust assumptions in development & deployment, good bye to seat based pricing for collaborations. 
+Make websites truely decentralize by remove trust assumptions in development & deployment, good bye to seat based pricing for collaborations.
 Allow DAOs to have private preview on websites collaborate and vote builds, reduce trust assumptions of website deployment by introducing zk proofs and custom ENS resolver.
-
 
 ## What
 
-Today, one can build a static dWebsite that is censorship resistent, decentralized by hosting it on IPFS, with resolution handled by ens domain. Websites can be updated via IPNS wiith immutable content trails and made persistent with IPFS pinnings. Great tools such as eth.limo and fleek made such approach user friendly. 
+Today, one can build a static dWebsite that is censorship resistent, decentralized by hosting it on IPFS, with resolution handled by ens domain. Websites can be updated via IPNS wiith immutable content trails and made persistent with IPFS pinnings. Great tools such as eth.limo and fleek made such approach user friendly.
 
 Pairing with smart contract, we can create dApp comprised of UI and fully on-chain application states that benefit from security and governance mechanism of Ethereum.
 
-A simple example is a static website that only visualize smart contract states, in a sense it works similar as a dynamic NFT. 
+A simple example is a static website that only visualize smart contract states, in a sense it works similar as a dynamic NFT.
 
 ## Challenges of DAW
 
 As billions of websites are not decentralized, we explore challenges and opportunites for making dWebsite greater.
 
 ### Private Preview for DAO collaboraitons
+
 Existing platforms such as Github, Vercel are hard to utilized by DAO teams.
 High seat-based pricing and lack of gate access control mechanisms with web3 identity (e.g. wallets), made typical DAO collaboration impossible.
 
-In particualr, private previews and review/voting on proposal are often essential for websites, while IPFS has no content encryption and teams fallback to small trusted core team andcentralized identity for collaboration.  
+In particualr, private previews and review/voting on proposal are often essential for websites, while IPFS has no content encryption and teams fallback to small trusted core team andcentralized identity for collaboration.
 
-To solve this, we create web3 identity friendly whitelist mechanism for website previews. Whitelist is made free. 
-
+To solve this, we create web3 identity friendly whitelist mechanism for website previews. Whitelist is made free.
 
 ### Trusted
+
 Websites subject to all sort of attack vectors, from DNS registrar, supply chain attack at NPM to various hosting concerns. Censorship resistance is not guarantee on hosted platforms and pipelines always require priviledged access.
 
 How could we bring on-chain security to make websites more autonomous, add guardrails and make changes more trackable?
 
-
-We see a lot of use cases from DAW, from displaying censorship-sensitive key information, Whistle Bowling, Crowdfunding, Community Notes, Internet Archive to where fair mechanisms is in need such  Autonomous World or Advertisement.
+We see a lot of use cases from DAW, from displaying censorship-sensitive key information, Whistle Bowling, Crowdfunding, Community Notes, Internet Archive to where fair mechanisms is in need such Autonomous World or Advertisement.
 
 ### Resolver routes
 
-
-
-
 ## How it works
 
-
 ### References
+
 [ENSIP-7: Contenthash field](https://docs.ens.domains/ensip/7)
 
 [ENSIP-10: Wildcard Resolution]
@@ -53,64 +48,61 @@ We see a lot of use cases from DAW, from displaying censorship-sensitive key inf
 ERC-3668
 https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gateway-interface
 
-
 ### custom Hybrid resolver
-- we deployed a Hybrid resolver which is able to resolve both on and off chain data.
-- source code of gateway is under `apps/worker`, originally maintained at separate forked repository [ens-offchain-registrar](
-https://github.com/debuggingfuture/ens-offchain-registrar)
 
+- we deployed a Hybrid resolver which is able to resolve both on and off chain data.
+- source code of gateway is under `apps/worker`, originally maintained at separate forked repository [ens-offchain-registrar](https://github.com/debuggingfuture/ens-offchain-registrar)
 
 ### custom whitelist
-Trust assumption. The demo use non-decentralized infrastructure cloudflare worker for deployment, however that is good trade-off given it is only preview but not public websites. That could be replace by D1 compatabilie techstack such as tableland.
 
+Trust assumption. The demo use non-decentralized infrastructure cloudflare worker for deployment, however that is good trade-off given it is only preview but not public websites. That could be replace by D1 compatabilie techstack such as tableland.
 
 ### Proof of Build
 
 - Using Next.js static websites as an example, we can gather fingerprint from the build (under `/out` directory)
- - routes (`/route1` create route1.html)
- - file hashes (CID via multiformat package as used by ipfs)
-
-
+- routes (`/route1` create route1.html)
+- file hashes (CID via multiformat package as used by ipfs)
 
 redirect derypted ipfs hash
 
 gateway can be switched and site is immutable
 
-
 Brave deprecated ipfs://
 https://github.com/brave/brave-browser/issues/37735
 
-
 - Contracts Cloned from template https://github.com/ensdomains/offchain-resolver
-
 
 <!-- Owner and deployer segregation -->
 
 - verifyBuild
 <!-- - executed by sequencer -->
-- generate signature 
- - prefer standard contenthash resolver
+- generate signature
+- prefer standard contenthash resolver
 - further automate the trustless process once Protokit is able to roll up to L1 and the production EVM bridge is deployed.
 
-
 ## Notes
+
 ### ENS contract address - testnet
+
 https://docs.ens.domains/learn/deployments
 https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
+
 #### Deploy Offchain resolver
+
 - https://ccip.tools/
 
-## cf workers logs
+## Cloudflare workers logs
+
 - start
   - `env-cmd pnpm run --filter @repo/gateway dev`
 - deploy
+
   - `env-cmd pnpm run --filter @repo/gateway deploy`
 
 - Check [Logs](https://dash.cloudflare.com/c91d52c288c452ab734ede1518b00e11/workers/services/view/ens-gateway/production/logs/live)
 
-
-
 ## Appchain
+
 - run tests
   - `env-cmd pnpm --filter @repo/chain env:inmemory test`
 - start the appchain, graphql
@@ -118,11 +110,20 @@ https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
 - start the demo app
   - `env-cmd pnpm mina:env:inmemory --filter @repo/mina-demo dev`
 
+## MACI Build Voting System
+
+- `pnpm i` on the root directory.
+- `pnpm i` on the `maci-wrapper` directory.
+- `pnpm run dev` to run.
+- To generate the proofs, you can refer to MACI's [official documentation](https://maci.pse.dev/docs/quick-start/poll-finalization)
 
 ### Apps and Packages
 
 - `docs`: a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
 - `web`: another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+- `wrapper-site`: implementation of geist gateway.
+- `fun-site`: play around with them!
+- `maci-wrapper`: for the implementation of the build voting system based on the [recommended wrapper app](https://github.com/yashgo0018/maci-wrapper) by the official MACI documentation
 - `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs` applications
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
