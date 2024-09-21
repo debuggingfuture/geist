@@ -32,7 +32,10 @@
       "@ensdomains/ensjs": "4.0.1-alpha.0",
       "multiformats": "^13.3.0",
       "reflect-metadata": "^0.1.13",
-      "viem": "^2.21.10"
+      "viem": "^2.9.2"
+    },
+    "peerDependencies": {
+      "viem": "^2.9.2"
     },
     "scripts": {
       "build": "rm -rf dist && tsc",

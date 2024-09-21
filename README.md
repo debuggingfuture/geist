@@ -54,10 +54,20 @@ Brave deprecated ipfs://
 https://github.com/brave/brave-browser/issues/37735
 
 
+- Contracts Cloned from template https://github.com/ensdomains/offchain-resolver
+- Fork 
+https://github.com/debuggingfuture/ens-offchain-registrar
+
+
 ## Notes
 ### ENS contract address - testnet
 https://docs.ens.domains/learn/deployments
 https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
+#### Deploy Offchain resolver
+- https://ccip.tools/
+
+
+
 
 
 ### Apps and Packages
