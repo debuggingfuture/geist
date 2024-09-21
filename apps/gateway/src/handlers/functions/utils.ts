@@ -59,3 +59,61 @@ export function stringifyNameForDb(
     }
   }
 }
+
+
+function arrayBufferToBase64(buffer:any) {
+  return btoa(String.fromCharCode.apply(null, [...new Uint8Array(buffer)]));
+}
+
+function base64ToArrayBuffer(base64:string) {
+  const binaryString = atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+
+export async function importKeyFromJwk(jwk:any) {
+  return await crypto.subtle.importKey(
+    "jwk",
+    jwk,
+    {
+      name: "AES-GCM",
+      length: 256
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+}
+
+// to quickly generate hash for demo
+// export const encryptDemo = async ()=>{
+//   const message = "bafybeifr5olumz4wa4z2hvyhj2qh74z6q5uc2fw3tdhzaqqhk3jdxlc3se";
+
+//   const key = await importKeyFromJwk(ENCRYPTION_KEY_JWK);
+//   // const key = await generateKey();
+//   const encrypted = await encrypt(message, key);
+
+//   const encryptedBase64 =  arrayBufferToBase64(encrypted);
+  
+//   const decrypted = await decrypt(encrypted, key);
+//   // @ts-ignore
+//   const exportedKey = await crypto.subtle.exportKey('jwk', key );
+
+//   console.log('exportedKey', JSON.stringify(exportedKey));
+//   console.log('encrypted', encryptedBase64);
+//   console.log('decrypted', decrypted);
+// }
+
+
+// Function to convert string to Uint8Array
+function str2ab(str:string) {
+return new TextEncoder().encode(str);
+}
+
+// Function to convert Uint8Array to string
+function ab2str(buf:any) {
+return new TextDecoder().decode(buf);
+}

@@ -1,5 +1,5 @@
 {
-  "name": "worker",
+  "name": "@repo/gateway",
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
@@ -17,6 +17,7 @@
     "wrangler": "^3.75.0"
   },
   "dependencies": {
+    "@tsndr/cloudflare-worker-jwt": "^2.5.3",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "itty-router": "^4.0.14",
     "kysely": "^0.26.1",

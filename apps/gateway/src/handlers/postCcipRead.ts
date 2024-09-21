@@ -13,9 +13,12 @@ import {
 } from 'viem/utils'
 import { z } from 'zod'
 
+import {importKeyFromJwk} from './functions/utils';
+import jwt from '@tsndr/cloudflare-worker-jwt';
 import { handleQuery } from '../ccip-read/query'
 import { resolverAbi } from '../ccip-read/utils'
 import { Env } from '../env'
+import { ENCRYPTION_KEY_JWK } from './encrypt'
 
 const schema = z.object({
   sender: z.string().refine((data) => isAddress(data)),
@@ -33,7 +36,6 @@ export const checkWhitelist = (address:string)=>{
 
 
   return whitelist.includes(address.toLowerCase());
-
 }
 
 // Function to convert ArrayBuffer to Base64 string
@@ -51,29 +53,7 @@ function base64ToArrayBuffer(base64:string) {
 }
 
 
-const ENCRYPTION_KEY_JWK = {
-  "kty": "oct",
-  "key_ops": [
-      "encrypt",
-      "decrypt"
-  ],
-  "alg": "A256GCM",
-  "ext": true,
-  "k": "O2URt6f4xF_pQDLAiT3VWWuLee-YQHDhOOFEJHv8SHE"
-};
 
-async function importKeyFromJwk(jwk:any) {
-  return await crypto.subtle.importKey(
-    "jwk",
-    jwk,
-    {
-      name: "AES-GCM",
-      length: 256
-    },
-    true,
-    ["encrypt", "decrypt"]
-  );
-}
 
 // to quickly generate hash for demo
 export const encryptDemo = async ()=>{
@@ -158,26 +138,39 @@ async function decrypt(encryptedData:any, key:any) {
 // Implements EIP-3668
 // https://eips.ethereum.org/EIPS/eip-3668
 export const postCcipRead = async (request: IRequest, env: Env) => {
+
+
+  
+
+
   const safeParse = schema.safeParse(request.params)
   const body: any = await request.json();
   const data = body.data;
-
   
   // pre-loaded from dns txt record
-  // const encryptedHash = "+NqvZYSQACT+Q45bRiYtQbQV1i+ifFrye8M9IPgp04vBfmDJdXtnzq8Kl5EvEbWypQj9at/NKBA4CmR3itxeS33oJS0HKRtPLa1NycAxuWCgvVAAJ2WT";
 
   const encryptedHash = base64ToArrayBuffer(body?.encryptedHash);
-
-  
   const key = await importKeyFromJwk(ENCRYPTION_KEY_JWK);
-
 
   console.log('body', body);
 
-  const address = await recoverMessageAddress({
-    message: toHex(SIGN_MESSAGE), // Convert the message to hex
-    signature: body?.token,
-  });
+  const token = body?.token;
+
+  // Case of using signature as token
+
+  // const address = await recoverMessageAddress({
+  //   message: toHex(SIGN_MESSAGE), // Convert the message to hex
+  //   signature: body?.token,
+  // });
+
+
+  // Case of using JWT (dynamic)
+
+  const { payload } = jwt.decode(token)
+
+  //@ts-ignore
+  const address = payload["verified_credentials"]?.[0]?.address;
+
 
   const isWhiteListed = checkWhitelist(address);
 

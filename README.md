@@ -56,7 +56,7 @@ https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gat
 
 ### custom Hybrid resolver
 - we deployed a Hybrid resolver which is able to resolve both on and off chain data.
-- source code of gateway is maintained at separate forked repository [ens-offchain-registrar](
+- source code of gateway is under `apps/worker`, originally maintained at separate forked repository [ens-offchain-registrar](
 https://github.com/debuggingfuture/ens-offchain-registrar)
 
 
@@ -101,7 +101,14 @@ https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
 - https://ccip.tools/
 
 ## cf workers logs
-https://dash.cloudflare.com/c91d52c288c452ab734ede1518b00e11/workers/services/view/ens-gateway/production/logs/live
+- start
+  - `env-cmd pnpm run --filter @repo/gateway dev`
+- deploy
+  - `env-cmd pnpm run --filter @repo/gateway deploy`
+
+- Check [Logs](https://dash.cloudflare.com/c91d52c288c452ab734ede1518b00e11/workers/services/view/ens-gateway/production/logs/live)
+
+
 
 ## Appchain
 - run tests
@@ -110,6 +117,7 @@ https://dash.cloudflare.com/c91d52c288c452ab734ede1518b00e11/workers/services/vi
   - `env-cmd pnpm mina:env:inmemory --filter @repo/chain dev`
 - start the demo app
   - `env-cmd pnpm mina:env:inmemory --filter @repo/mina-demo dev`
+
 
 ### Apps and Packages
 

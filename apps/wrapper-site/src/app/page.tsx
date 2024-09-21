@@ -47,11 +47,9 @@ const wagmiConfig = createConfig({
 
       // use SameSite=None; Secure and credentials:include later to skip this step
       const token = localStorage.getItem('dynamic_authentication_token');
-      console.log('token', token);
 
       // can load from dns txt record from contract or UI
       const encryptedHash = getCookieValue('targetEncryptedHash') || '+NqvZYSQACT+Q45bRiYtQbQV1i+ifFrye8M9IPgp04vBfmDJdXtnzq8Kl5EvEbWypQj9at/NKBA4CmR3itxeS33oJS0HKRtPLa1NycAxuWCgvVAAJ2WT';
-      console.log('token', token);
       console.log('encryptedHash', encryptedHash)
 
       // TODO replace contract
@@ -70,18 +68,21 @@ const wagmiConfig = createConfig({
         });
 
 
-      const { data: ccipData, decrypted: ipsfHash } = results;
+      const { data: ccipData, decrypted: ipfsHash } = results;
 
-      console.log('response from gateway', ccipData, ipsfHash);
+      console.log('response from gateway', ccipData, ipfsHash);
 
       // we should verify with ccipdata, then redriect
+      // gateway is optional
+      if (ipfsHash) {
+        const ipfsUrl = `https://${ipfsHash}.ipfs.fleek.cool`;
 
-      const ipfsUrl = `https://${ipsfHash}.ipfs.fleek.cool`;
+        setTimeout(() => {
+          window.location.replace(ipfsUrl);
 
-      setTimeout(() => {
-        window.location.replace(ipfsUrl);
+        }, 30 * 1000)
+      }
 
-      }, 30 * 1000)
 
       return ccipData
 
