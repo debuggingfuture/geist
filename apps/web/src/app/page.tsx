@@ -10,7 +10,7 @@ function AutonomousSiteCard({
   ensName: string;
 }): JSX.Element {
   return (
-    <div className="flex flex-col border border-neutral border-solid p-3 rounded-md cursor-pointer hover:bg-accent hover:text-accent-content">
+    <div className="flex flex-col border-2 border-neutral border-solid p-3 rounded-md cursor-pointer hover:bg-accent hover:text-accent-content">
       <div className="text-xl font-semibold">{name}</div>
       <div className="divider my-1" />
       <div className="text-sm">{ensName}</div>
