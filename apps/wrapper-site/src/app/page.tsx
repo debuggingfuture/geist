@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { http } from "viem";
 import { optimism, optimismSepolia } from "viem/chains";
-import { createConfig, WagmiProvider } from "wagmi";
+import { createConfig, useAccount, useSignMessage, WagmiProvider } from "wagmi";
 
 const wagmiConfig = createConfig({
   chains: [optimism, optimismSepolia],
@@ -40,25 +40,44 @@ function Providers({ children }: { children: ReactNode }): JSX.Element {
   );
 }
 
-export default function Page(): JSX.Element {
+function Page(): JSX.Element {
+  const { isConnected } = useAccount();
+  const { signMessageAsync } = useSignMessage();
+
+  const handleSignMessage = async () => {
+    const signature = await signMessageAsync({
+      message: "MAGICGEIST",
+    });
+
+    console.log({ signature });
+  };
+
   return (
     <main className="flex flex-col items-center justify-between p-24">
-      <Providers>
-        <div className="border-2 border-neutral rounded-md p-5">
-          <h1 className="font-bold text-center mb-2 text-2xl">Geist Gateway</h1>
-          <div>Please verify your wallet to view the preview page</div>
-          <div className="flex items-center justify-center my-3">
-            <DynamicWidget
-              buttonClassName="!w-full"
-              buttonContainerClassName="!w-full"
-            />
-          </div>
+      <div className="border-2 border-neutral rounded-md p-5">
+        <h1 className="font-bold text-center mb-2 text-2xl">Geist Gateway</h1>
+        <div>Please verify your wallet to view the preview page</div>
+        <div className="flex items-center justify-center my-3">
+          <DynamicWidget />
+        </div>
 
-          <button className="cursor-pointer text-lg bg-primary text-primary-content border-2 rounded-md border-neutral py-2 w-full hover:bg-accent hover:bg-accent-content">
+        {isConnected && (
+          <button
+            className="cursor-pointer text-lg bg-primary text-primary-content border-2 rounded-md border-neutral py-2 w-full hover:bg-accent hover:text-accent-content"
+            onClick={handleSignMessage}
+          >
             Sign Message and Preview
           </button>
-        </div>
-      </Providers>
+        )}
+      </div>
     </main>
+  );
+}
+
+export default function PageWrapper(): JSX.Element {
+  return (
+    <Providers>
+      <Page />
+    </Providers>
   );
 }
