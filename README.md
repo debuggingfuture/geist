@@ -1,7 +1,7 @@
 
 ## 🤖 Geist
 
-Decentralized Autonomous Website Builder.
+Decentralized Autonomous Website (DAW) Builder.
 Wallet whitelist for Private Previews. Trustless Deployment after proposal voting. 
 
 Make websites truely decentralize by remove trust assumptions in development & deployment, good bye to seat based pricing for collaborations. 
@@ -17,26 +17,27 @@ Pairing with smart contract, we can create dApp comprised of UI and fully on-cha
 
 A simple example is a static website that only visualize smart contract states, in a sense it works similar as a dynamic NFT. 
 
-### Challenges of Autonomous websites
+## Challenges of DAW
+
+### Private Preview for DAO collaboraitons
+Existing platforms such as Github, Vercel are hard to utilized by DAO teams.
+High seat-based pricing and lack of gate access control mechanisms with web3 identity (e.g. wallets), made typical DAO collaboration impossible.
+
+In particualr, private previews and review/voting on proposal are often essential for websites, while IPFS has no content encryption and teams fallback to small trusted core team andcentralized identity for collaboration.  
+
+To solve this, we create web3 identity friendly whitelist mechanism for website previews. Whitelist is made free. 
 
 
+### Trusted
+Websites subject to all sort of attack vectors, from DNS registrar, supply chain attack at NPM to various hosting concerns. Censorship resistance is not guarantee on hosted platforms and pipelines always require priviledged access.
+
+How could we bring on-chain security to make websites more autonomous, add guardrails and make changes more trackable?
+
+
+We see a lot of use cases from DAW, from displaying censorship-sensitive key information, Whistle Bowling, Crowdfunding, Community Notes, Internet Archive to where fair mechanisms is in need such  Autonomous World or Advertisement.
 
 ### Resolver routes
 
-
-### Deployment flow
-
-```mermaid
-sequenceDiagram
-    Verifier->>Verify Build
-    Platform-> Upload IPFS
-    Platform->>Contract: set record
-    Platform-->>Contract: burn fuse
-    Client->Wildcard resolver: Request
-    Gateway->Response: Response
-    
-
-```
 
 
 
@@ -53,7 +54,9 @@ https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gat
 
 
 ### custom Hybrid resolver
--  we deployed a Hybrid resolver which is able to rresolve for both on off chain data
+- we deployed a Hybrid resolver which is able to resolve both on and off chain data.
+- source code of gateway is maintained at separate forked repository [ens-offchain-registrar](
+https://github.com/debuggingfuture/ens-offchain-registrar)
 
 
 ### custom whitelist
@@ -78,8 +81,6 @@ https://github.com/brave/brave-browser/issues/37735
 
 
 - Contracts Cloned from template https://github.com/ensdomains/offchain-resolver
-- Fork 
-https://github.com/debuggingfuture/ens-offchain-registrar
 
 
 <!-- Owner and deployer segregation -->
