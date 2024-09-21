@@ -16,7 +16,7 @@ export default function Page({
           className="tabs tabs-boxed border-2 border-neutral border-solid bg-base"
           role="tablist"
         >
-          <Link className="tab" role="tab" href={`/site/${address}`}>
+          <Link className="tab" role="tab" href={`/geist-app/site/${address}`}>
             Overview
           </Link>
           <Link className="tab tab-active" role="tab" href="#">
@@ -42,12 +42,8 @@ export default function Page({
                 <div className="font-bold text-primary">0x42...1ab2</div>
               </div>
               <div className="flex gap-3 items-center">
-                <button className="btn btn-outline btn-sm" onClick={() => {}}>
-                  Preview
-                </button>
-                <button className="btn btn-primary btn-sm" onClick={() => {}}>
-                  Vote
-                </button>
+                <button className="btn btn-outline btn-sm">Preview</button>
+                <button className="btn btn-primary btn-sm">Vote</button>
               </div>
             </div>
           </div>
