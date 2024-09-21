@@ -2,12 +2,15 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
+import {ENS} from "../src/ENS.sol";
 import {HybridResolver} from "../src/HybridResolver.sol";
 
-contract CounterScript is Script {
+contract HybridResolverScript is Script {
     function setUp() public {}
 
     function run() public {
+        ENS ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
+
         uint256 deployerPrivateKey = vm.envUint("DEPLOYER_WALLET_PRIVATE_KEY");
         address deployerAddress = vm.rememberKey(deployerPrivateKey);
         console.log("deployer address", deployerAddress);
@@ -25,14 +28,11 @@ contract CounterScript is Script {
         signers[0] = 0x7f890c611c3B5b8Ff44FdF5Cf313FF4484a2D794;
         signers[1] = 0x0987654321098765432109876543210987654321;
 
+        address verifier = 0x7f890c611c3B5b8Ff44FdF5Cf313FF4484a2D794;
+        address controller = 0x7f890c611c3B5b8Ff44FdF5Cf313FF4484a2D794;  
+
         // Deploy the HybridResolver contract
-        HybridResolver resolver = new HybridResolver(url, signers);
-
-        
-
-
-
-
+        HybridResolver resolver = new HybridResolver(ens, url, signers, verifier, controller);
 
 
 

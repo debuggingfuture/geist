@@ -26,6 +26,28 @@ export const createClient = (chain: ChainWithBaseContracts = sepolia) =>{
       return client;
 }
 
+export const setContenthash = async (contenthash: string)=>{
+
+    const account = privateKeyToAccount(ENS_PRIVATE_KEY as Hex);
+
+    console.log('account', account.address);
+    const wallet = createWalletClient({
+        account,
+        chain: addEnsContracts(sepolia),
+        transport: http(),
+      })
+    
+    //   @ts-ignore
+       const hash = await setRecords(wallet as never, {
+        account,
+        name: 'app.ethsg24.eth',
+        // required
+        resolverAddress: '0x8FADE66B79cC9f707aB26799354482EB93a5B7dD', // Add the appropriate resolver address
+        texts: [{ key: 'foo', value: 'bar' }],
+    })
+
+}
+
 export const setDomainResolver = async (resolverAddress:string)=>{
     const account = privateKeyToAccount(ENS_PRIVATE_KEY as Hex);
 
