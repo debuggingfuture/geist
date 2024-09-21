@@ -81,7 +81,13 @@ https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
 ## cf workers logs
 https://dash.cloudflare.com/c91d52c288c452ab734ede1518b00e11/workers/services/view/ens-gateway/production/logs/live
 
-
+## Appchain
+- run tests
+  - `env-cmd pnpm --filter @repo/chain env:inmemory test`
+- start the appchain, graphql
+  - `env-cmd pnpm mina:env:inmemory --filter @repo/chain dev`
+- start the demo app
+  - `env-cmd pnpm mina:env:inmemory --filter @repo/mina-demo dev`
 
 ### Apps and Packages
 
