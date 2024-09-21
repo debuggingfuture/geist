@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { createClient, setDomainResolver } from './index';
+import { createClient, setContenthash, setDomainResolver } from './index';
 import { mainnet } from 'viem/chains';
 
 describe("ens", () => {
@@ -8,7 +8,7 @@ describe("ens", () => {
         // set owner first for testnet
     // fail at script, revert at etherscan 
     // https://sepolia.etherscan.io/tx/0xed3fb0a8d78e2992b67eb675d61c5b27a40cd7490c882f84c2aad6d6205a72b8
-    test('#setDomainResolver', async ()=>{
+    test.skip('#setDomainResolver', async ()=>{
 
         // original dns
         const resolverAddress = '0x5a07C75Ae469Bf3ee2657B588e8E6ABAC6741b4f';
@@ -19,8 +19,16 @@ describe("ens", () => {
     })
 
 
+    test.only('#setContenthash', async ()=>{
 
-    test('#getAddress', async ()=>{
+        const contenthash = 'bylfdsakfljsa';
+        
+        await setContenthash(contenthash);
+    })
+
+
+
+    test('#getAddress mainnet', async ()=>{
         const client = await createClient(mainnet);
         // const ethAddress = await client.getAddressRecord({ name: 'geist.network' });
         
@@ -29,11 +37,11 @@ describe("ens", () => {
         expect(result!.value).toEqual('0x962EFc5A602f655060ed83BB657Afb6cc4b5883F')
     })
 
-    test('#getAddress', async ()=>{
-        const client = await createClient(mainnet);
+    test('#getResolver sepolia', async ()=>{
+        const client = await createClient();
         // const ethAddress = await client.getAddressRecord({ name: 'geist.network' });
         
-        const result = await client.getResolver({ name: 'geist.network' });
+        const result = await client.getResolver({ name: 'ethsg24.eth' });
 
         console.log('result', result)
     

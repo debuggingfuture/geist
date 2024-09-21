@@ -2,7 +2,10 @@
 ## 🤖 Geist
 
 Decentralized Autonomous Website Builder.
-DAO collaborate and vote builds, reduce trust assumptions of website deployment by introducing zk proofs and custom ENS resolver.
+Wallet whitelist for Private Previews. Trustless Deployment after proposal voting. 
+
+Make websites truely decentralize by remove trust assumptions in development & deployment, good bye to seat based pricing for collaborations. 
+Allow DAOs to have private preview on websites collaborate and vote builds, reduce trust assumptions of website deployment by introducing zk proofs and custom ENS resolver.
 
 
 ## What
@@ -57,6 +60,14 @@ https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gat
 Trust assumption. The demo use non-decentralized infrastructure cloudflare worker for deployment, however that is good trade-off given it is only preview but not public websites. That could be replace by D1 compatabilie techstack such as tableland.
 
 
+### Proof of Build
+
+- Using Next.js static websites as an example, we can gather fingerprint from the build (under `/out` directory)
+ - routes (`/route1` create route1.html)
+ - file hashes (CID via multiformat package as used by ipfs)
+
+
+
 redirect derypted ipfs hash
 
 gateway can be switched and site is immutable
@@ -71,6 +82,15 @@ https://github.com/brave/brave-browser/issues/37735
 https://github.com/debuggingfuture/ens-offchain-registrar
 
 
+<!-- Owner and deployer segregation -->
+
+- verifyBuild
+<!-- - executed by sequencer -->
+- generate signature 
+ - prefer standard contenthash resolver
+- further automate the trustless process once Protokit is able to roll up to L1 and the production EVM bridge is deployed.
+
+
 ## Notes
 ### ENS contract address - testnet
 https://docs.ens.domains/learn/deployments
@@ -81,7 +101,13 @@ https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
 ## cf workers logs
 https://dash.cloudflare.com/c91d52c288c452ab734ede1518b00e11/workers/services/view/ens-gateway/production/logs/live
 
-
+## Appchain
+- run tests
+  - `env-cmd pnpm --filter @repo/chain env:inmemory test`
+- start the appchain, graphql
+  - `env-cmd pnpm mina:env:inmemory --filter @repo/chain dev`
+- start the demo app
+  - `env-cmd pnpm mina:env:inmemory --filter @repo/mina-demo dev`
 
 ### Apps and Packages
 

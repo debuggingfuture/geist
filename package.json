@@ -6,7 +6,12 @@
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "mina:env:development": "env-cmd -f ./packages/chain/src/environments/development/.env -- pnpm",
+    "mina:env:inmemory": "env-cmd -f ./packages/chain/src/environments/inmemory/.env -- pnpm",
+    "mina:env:sovereign": "env-cmd -f ./packages/chain/src/environments/sovereign/.env -- pnpm"
+
+
   },
   "devDependencies": {
     "prettier": "^3.2.5",
