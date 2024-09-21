@@ -1,11 +1,11 @@
 import { TestingAppChain } from "@proto-kit/sdk";
-import { CircuitString, Field, MerkleList, MerkleMap, MerkleMapWitness, MerkleTree, method, Poseidon, PrivateKey } from "o1js";
+import { CircuitString, Field, MerkleList, MerkleMap, MerkleMapWitness, MerkleTree, method, Poseidon, PrivateKey, PublicKey } from "o1js";
 import { Build, BuildMerkleWitness } from "../../../src/runtime/modules/build";
 import { log } from "@proto-kit/common";
 import { BalancesKey, TokenId, UInt64 } from "@proto-kit/library";
 import fs from "fs";
 import path from "path";
-import { mapCidAsPoseidon, processDirectory } from "../../../src/lib/build-proof";
+import { createApporvalProof, createFinalBuildProof, createRouteProof, mapCidAsPoseidon, processDirectory } from "../../../src/lib/build-proof";
 import { createFixtureFileProof, loadDirname } from "../../util";
 import { generateCID } from "../../../src/lib/cid";
 
@@ -16,16 +16,17 @@ const __dirname = loadDirname();
 log.setLevel("ERROR");
 
 const sendTx = async (signer:any, appChain: any, txFx: ()=>Promise<any>)=>{
-    const tx1 = await appChain.transaction(signer, txFx);
+    const tx = await appChain.transaction(signer, txFx);
 
-    await tx1.sign();
-    await tx1.send();
-    console.log('tx sent');
-    
+    await tx.sign();
+    await tx.send();
     const block = await appChain.produceBlock();
 
-    console.log('block status', block?.transactions[0].status.toBoolean())
-  
+    console.log('tx sent, block status', block?.transactions[0].status.toBoolean())
+    if(!block?.transactions[0].status.toBoolean()){
+      console.log('block', block?.transactions)
+      throw new Error(block?.transactions[0].statusMessage);
+    }
 }
 
 
@@ -69,6 +70,7 @@ describe("build", () => {
       list1.hash.assertEquals(list2.hash);
 
   });
+  
 
   it('string based merkle tree test', ()=>{
     
@@ -93,112 +95,113 @@ describe("build", () => {
 
   })
 
-  it.only("should demonstrate how build work", async () => {
 
-    // setup from fixture
-    const { map, root, cidByFileKey } = await createFixtureFileProof();
+  describe('build proof', ()=>{
+    let appChain:any;
+    let signer:PublicKey;
+    let build:Build;
 
-    console.log('root', root, map);
 
-    const appChain = TestingAppChain.fromRuntime({
-      Build,
-    });
+    let fileProof:Field;
+    let routeProof:Field;
+    let approvalProof:Field;
 
-    appChain.configurePartial({
-      Runtime: {
-        Build: {
-          root: Field.from(0),
-          witness: Field.from(0)
+    let fileMerkelMap:MerkleMap;
+
+    beforeEach(async ()=>{
+      appChain = TestingAppChain.fromRuntime({
+        Build,
+      });
+  
+      appChain.configurePartial({
+        Runtime: {
+          Build: {
+            root: Field.from(0),
+            fileProof : Field.from(0),
+            routeProof: Field.from(0),
+            approvalProof: Field.from(0),
+            witness: Field.from(0)
+          },
+          // seems always included
+          Balances: {
+            totalSupply: UInt64.from(10000),
+          },
         },
-        // seems always included
-        Balances: {
-          totalSupply: UInt64.from(10000),
-        },
-      },
-    });
+      });
+      
+      const alicePrivateKey = PrivateKey.random();
+      const alice = alicePrivateKey.toPublicKey();
+      signer = alice;
+      
+      await appChain.start();
+      appChain.setSigner(alicePrivateKey);
 
+
+      build = appChain.runtime.resolve("Build");
+
+
+      // setup for buidl proof
+
+      
+      // setup from fixture
+      const { map, root, cidByFileKey } = await createFixtureFileProof();
+      fileProof = root;
+      fileMerkelMap = map;
+
+      const {hash} = createRouteProof(['/route1', '/route2']);
+      
+      routeProof = hash;
+      approvalProof = createApporvalProof();
+
+    // setup proofs
+      await sendTx(signer, appChain, async ()=>{
+        await build.init( fileProof, routeProof, approvalProof);
+      })
+
+    })
+
+  it.only("should deploy fail without proof", async ()=>{
     
-    // const buildMetadata = {
-    //   routes :['/route1', '/route2'],
-    // }
-    await appChain.start();
-
-
-
-    const alicePrivateKey = PrivateKey.random();
-    const alice = alicePrivateKey.toPublicKey();
-    appChain.setSigner(alicePrivateKey);
-
-
     const build = appChain.runtime.resolve("Build");
 
-    await sendTx(alice, appChain, async ()=>{
-      await build.init(root);
+    expect(
+      sendTx(signer, appChain, async ()=>{
+          await build.deployBuild(Field.from(0));
+      })
+    ).rejects.toThrow('YOU SHALL NOT PASS!');
+  })
+
+  it.only("should deploy success with proof", async () => {
+
+         
+    const buildProof = createFinalBuildProof({
+      fileProof,
+      routeProof,
+      approvalProof
     });
 
-
-    // setup 
-    
     const fileKey1 = CircuitString.fromString('file1.html').hash();
-    const cidHash = map.get(fileKey1);
-    const witness = map.getWitness(fileKey1);
-
+    const cidHash = fileMerkelMap.get(fileKey1);
+    const fileWitness = fileMerkelMap.getWitness(fileKey1);
 
     const rootLatest = await appChain.query.runtime.Build.root.get();
+    const fileProofLatest = await appChain.query.runtime.Build.fileProof.get();
 
-    const [rootComputed, key] = witness.computeRootAndKeyV2(
+    const [fileProofComputed, key] = fileWitness.computeRootAndKeyV2(
       cidHash   
     );
 
-    rootComputed.assertEquals(rootLatest!);
+    fileProofComputed.assertEquals(fileProofLatest!);
 
-
-    await sendTx(alice, appChain, async ()=>{
-
-      await build.verifyFile(cidHash, witness);
+    await sendTx(signer, appChain, async ()=>{
+      await build.verifyFile(cidHash, fileWitness);
     });
 
-    console.log('tx sent');
-    
-
-
-      
-    // const tx = await appChain.transaction(alice, async ()=>{
-    //   await build.init(root);
+    // await sendTx(signer, appChain, async ()=>{
+    //   await build.deployBuild(buildProof);
     // });
 
-    // await tx1.sign();
-    // await tx1.send();
-    // console.log('tx sent');
-    
-    // await appChain.produceBlock();
 
-
-    // // // gets a plain witness for leaf at index 0n
-    // const witness = await appChain.query.runtime.Build.witness.get();
-
-    
-    // if(!root){
-    //   throw new Error('root not found');
-    // }
-
-    // witness?.calculateRoot(Field.from(123)).assertEquals(root);
-
-
-
-    // const tx1 = await appChain.transaction(alice, async () => {
-    //   await build.addBuild(tokenId, alice, UInt64.from(1000));
-    // });
-
-    // await tx1.sign();
-    // await tx1.send();
-
-    // const block = await appChain.produceBlock();
-
-    // const key = new BalancesKey({ tokenId, address: alice });
-    // const balance = await appChain.query.runtime.Balances.balances.get(key);
-
-    // expect(block?.transactions[0].status.toBoolean()).toBe(true);
-    // expect(balance?.toBigInt()).toBe(1000n);
   }, 1_000_000);
+});
 });

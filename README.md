@@ -82,6 +82,15 @@ https://github.com/brave/brave-browser/issues/37735
 https://github.com/debuggingfuture/ens-offchain-registrar
 
 
+<!-- Owner and deployer segregation -->
+
+- verifyBuild
+<!-- - executed by sequencer -->
+- generate signature 
+ - prefer standard contenthash resolver
+- further automate the trustless process once Protokit is able to roll up to L1 and the production EVM bridge is deployed.
+
+
 ## Notes
 ### ENS contract address - testnet
 https://docs.ens.domains/learn/deployments

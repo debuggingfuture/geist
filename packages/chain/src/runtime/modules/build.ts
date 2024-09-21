@@ -4,18 +4,18 @@ import { runtimeModule, state, runtimeMethod, RuntimeModule } from "@proto-kit/m
 import { State, assert } from "@proto-kit/protocol";
 import { Balance,  TokenId } from "@proto-kit/library";
 import { CircuitString, Field, MerkleMapWitness, MerkleTree, MerkleWitness, PublicKey } from "o1js";
-import { mapCidAsPoseidon } from "../../lib/build-proof";
+import { createFinalBuildProof, mapCidAsPoseidon } from "../../lib/build-proof";
 
 const treeHeight = 8;
 // creates the corresponding MerkleWitness class that is circuit-compatible
 export class BuildMerkleWitness extends MerkleWitness(treeHeight) {}
 
-
-
 interface BuildConfig {
-//   totalSupply: Balance;
-        root: Field;
-        witness: Field;
+      root: Field;
+      fileProof: Field;
+      routeProof: Field;
+      approvalProof: Field;
+      witness: Field;
 }
 
 @runtimeModule()
@@ -23,63 +23,83 @@ export class Build extends RuntimeModule<BuildConfig> {
 
     @state() root = State.from<Field>(Field);
 
-    @state() witness = State.from<BuildMerkleWitness>(BuildMerkleWitness);
+    @state() fileProof = State.from<Field>(Field);
+
+    @state() routeProof = State.from<Field>(Field);
+
+    @state() approvalProof = State.from<Field>(Field);
+
+    // @state() witness = State.from<BuildMerkleWitness>(BuildMerkleWitness);
 
 
   /**
-   * Given a build, generated proof of routes, files etc
-   * Commit approved build on chain
-   * Only if build is aligning with it can be deployed
+   * Given a build, generated proof of routes, files and approval (from voting)
+   * Only if build is aligning the commitment can it be deployed
    * 
-   * @param buildCommitment 
+   * To support more fine-grained verification, store individual profos
+   * then generate final build commitment composed of all proofs
+   * 
+   * @param fileProof 
+   * @param routeProof 
+   * @param approvalProof 
+   * 
    */
 
   @runtimeMethod()
-  public async init(buildCommitment: Field): Promise<void> {
-    await this.root.set(buildCommitment);
-    console.log('root updated', buildCommitment);
-  }
+  public async init(
+    fileProof:Field,
+    routeProof:Field,
+    approvalProof: Field
 
-
-  @runtimeMethod()
-  public async verifySignature(
-    tokenId: TokenId,
   ): Promise<void> {
+    const root = createFinalBuildProof({
+      fileProof,
+      routeProof,
+      approvalProof
+    })
+
+    await this.fileProof.set(fileProof);
+    await this.routeProof.set(routeProof);
+    await this.approvalProof.set(approvalProof);
+    await this.root.set(root);
+    console.log('root updated', root);
   }
 
   @runtimeMethod()
   public async verifyFile(cidHash: Field, mapWitness: MerkleMapWitness){
       // we fetch the on-chain commitment
-      let root = await this.root.get();
+      let fileProof = await this.fileProof.get();
 
       const [rootComputed, key] = mapWitness.computeRootAndKeyV2(
         cidHash
         );
         
-      console.log('key', key);
-      console.log('root', root.value);
-      console.log('rootComputed', rootComputed);
-      assert(rootComputed.equals(root.value), 'root not equal');
+      assert(rootComputed.equals(fileProof.value), 'root not equal');
    
   }
   
   @runtimeMethod()
   public async verifyBuild(
+      buildProof: Field,
   ): Promise<void> {
+    let root = await this.root.get();
+    console.log('ok', root.value)
 
-    // do something
+    assert(buildProof.equals(root.value), 'YOU SHALL NOT PASS!');
+
   }
 
 
   @runtimeMethod()
   public async deployBuild(
-    tokenId: TokenId,
+    buildProof: Field,
   ): Promise<void> {
 
     // do something
 
-    await this.verifyBuild();
+    await this.verifyBuild(buildProof);
 
+    console.log('deploy the site');
 
 
   }

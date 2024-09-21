@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { readdirSync } from "node:fs";
 import { generateCID } from './cid';
-import { CircuitString, MerkleList, MerkleMap } from 'o1js';
+import { CircuitString, Field, MerkleList, MerkleMap } from 'o1js';
 
 export type BuildProofInputParams = {
     fileHashMap: Map<string, any>
@@ -16,7 +16,7 @@ export type RouteProofInputParams ={
 
 
 
-export const processDirectory = async (dir: string, root:string, map:Map<string, any>): Promise<Map<string, any>> => {
+export const processDirectory = async (dir: string, rootDir:string, map:Map<string, any>): Promise<Map<string, any>> => {
     const entries = readdirSync(dir, {
       withFileTypes: true,
     });
@@ -25,9 +25,9 @@ export const processDirectory = async (dir: string, root:string, map:Map<string,
       const fullPath = path.join(dir, entry.name);
 
       if (entry.isDirectory()) {
-        await processDirectory(fullPath, root, map);
+        await processDirectory(fullPath, rootDir, map);
       } else if (entry.isFile()) {
-        const buildPath = path.relative(root, path.resolve(entry.path, entry.name));
+        const buildPath = path.relative(rootDir, path.resolve(entry.path, entry.name));
         const cid = await generateCID(fs.readFileSync(fullPath));
         map.set(buildPath, cid);
         console.log(`add buildPath: ${buildPath}, CID: ${cid}`);
@@ -44,6 +44,7 @@ export const mapCidAsPoseidon = (cid:string)=>{
 // let hash = Hash.Poseidon;
   return CircuitString.fromString(cid).hash();
 }
+
 
 
 export const createFileProof = (cidByFileKey: Map<string, string>)=>{
@@ -86,5 +87,26 @@ export const createRouteProof = (routes:string[])=>{
  */
 export const createApporvalProof = ()=>{
 
+  return Field.from(0n);
+
+}
+
+export const createFinalBuildProof = ({
+  fileProof,
+  routeProof,
+  approvalProof
+}:{
+  fileProof: Field,
+  routeProof: Field,
+  approvalProof: Field
+})=>{
+  const map = new MerkleMap();
+
+  map.set(CircuitString.fromString("fileProof").hash(), fileProof);
+  map.set(CircuitString.fromString("routeProof").hash(), routeProof);
+  map.set(CircuitString.fromString("approvalProof").hash(), approvalProof);
+
+  return map.getRoot();
+  
 
 }
