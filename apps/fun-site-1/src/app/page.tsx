@@ -12,11 +12,16 @@ export default function Home() {
         alt=""
         className="absolute left-[800px] top-[550px] w-[250px]"
       />
-      {/* <img
+      <img
+        src="./stickman.gif"
+        alt=""
+        className="absolute left-[1000px] top-[550px] w-[250px]"
+      />
+      <img
         src="./karthik.jpg"
         alt=""
-        className="absolute left-[-400px] top-[-150px] w-[1200px] h-[1200px]"
-      /> */}
+        className="absolute left-[1110px] top-[560px] w-[60px] h-[60px] rounded-full motion-reduce:animate-bounce"
+      />
     </div>
   );
 }
