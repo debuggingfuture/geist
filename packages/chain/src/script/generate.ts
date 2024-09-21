@@ -10,7 +10,7 @@ import { processDirectory } from "../lib/build-proof";
     }
   
     try {
-      await processDirectory(rootDir);
+      await processDirectory(rootDir, rootDir, new Map());
     } catch (error) {
       console.error('An error occurred:', error);
     }

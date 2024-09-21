@@ -15,6 +15,7 @@ export const generateCID = async (content: any): Promise<string> => {
   const cid = await CID.create(1, json.code, hash)
 
   // Return the CID as a string
-  return cid.toString()
+  return cid.toString();
+
 }
 

@@ -14,7 +14,7 @@ export type RouteProofInputParams ={
 
 
 
-export const processDirectory = async (dir: string): Promise<void> => {
+export const processDirectory = async (dir: string, root:string, map:Map<string, any>): Promise<Map<string, any>> => {
     const entries = readdirSync(dir, {
       withFileTypes: true,
     });
@@ -22,14 +22,18 @@ export const processDirectory = async (dir: string): Promise<void> => {
     for (const entry of entries) {
       console.log('entry', entry)
       const fullPath = path.join(dir, entry.name);
-  
+
       if (entry.isDirectory()) {
-        await processDirectory(fullPath);
+        await processDirectory(fullPath, root, map);
       } else if (entry.isFile()) {
+        const buildPath = path.relative(root, path.resolve(entry.path, entry.name));
         const cid = await generateCID(fullPath);
-        console.log(`File: ${fullPath}, CID: ${cid}`);
+        map.set(buildPath, cid);
+        console.log(`add buildPath: ${buildPath}, CID: ${cid}`);
       }
     }
+    
+    return map;
   }
   
   
