@@ -1,13 +1,12 @@
 import { CurrencyAmount, Token } from "@uniswap/sdk-core";
 import { Pair, Route } from "@uniswap/v2-sdk";
 import { Address, createPublicClient, http, parseAbi } from "viem";
-import { mainnet } from "wagmi";
-import scaffoldConfig from "~~/scaffold.config";
+import { mainnet } from "wagmi/chains";
 import { ChainWithAttributes } from "~~/utils/scaffold-eth";
 
 const publicClient = createPublicClient({
   chain: mainnet,
-  transport: http(`${mainnet.rpcUrls.alchemy.http[0]}/${scaffoldConfig.alchemyApiKey}`),
+  transport: http(`${mainnet.rpcUrls.default}`),
 });
 
 const ABI = parseAbi([

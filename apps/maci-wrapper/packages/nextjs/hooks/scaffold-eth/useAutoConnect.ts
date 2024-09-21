@@ -1,8 +1,7 @@
 import { useEffectOnce, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { Chain, hardhat } from "viem/chains";
-import { Connector, useAccount, useConnect } from "wagmi";
+import { Connector, useAccountEffect, useConnect } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
-import { burnerWalletId } from "~~/services/web3/wagmi-burner/BurnerConnector";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
 
 const SCAFFOLD_WALLET_STORAGE_KEY = "scaffoldEth2.wallet";
@@ -32,16 +31,10 @@ const getInitialConnector = (
 
   const allowBurner = scaffoldConfig.onlyLocalBurnerWallet ? initialNetwork.id === hardhat.id : true;
 
-  if (!previousWalletId) {
-    // The user was not connected to a wallet
-    if (allowBurner && scaffoldConfig.walletAutoConnect) {
-      const connector = connectors.find(f => f.id === burnerWalletId);
-      return { connector, chainId: initialNetwork.id };
-    }
-  } else {
+  if (previousWalletId) {
     // the user was connected to wallet
     if (scaffoldConfig.walletAutoConnect) {
-      if (previousWalletId === burnerWalletId && !allowBurner) {
+      if (!allowBurner) {
         return;
       }
 
@@ -62,7 +55,7 @@ export const useAutoConnect = (): void => {
     initializeWithValue: false,
   });
   const connectState = useConnect();
-  useAccount({
+  useAccountEffect({
     onConnect({ connector }) {
       setWalletId(connector?.id ?? "");
     },
@@ -73,7 +66,13 @@ export const useAutoConnect = (): void => {
   });
 
   useEffectOnce(() => {
-    const initialConnector = getInitialConnector(getTargetNetworks()[0], walletId, connectState.connectors);
+    const initialConnector = getInitialConnector(
+      getTargetNetworks()[0],
+      walletId,
+
+      //@ts-ignore
+      connectState.connectors,
+    );
 
     if (initialConnector?.connector) {
       connectState.connect({ connector: initialConnector.connector, chainId: initialConnector.chainId });

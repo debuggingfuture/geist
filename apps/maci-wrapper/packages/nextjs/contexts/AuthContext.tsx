@@ -22,7 +22,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
   const [stateIndex, setStateIndex] = useState<bigint | null>(null);
   const [signatureMessage, setSignatureMessage] = useState<string>("");
 
-  const { signMessageAsync } = useSignMessage({ message: signatureMessage });
+  const { signMessageAsync } = useSignMessage();
 
   useEffect(() => {
     setSignatureMessage(`Login to ${window.location.origin}`);
@@ -33,14 +33,14 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 
     (async () => {
       try {
-        const signature = await signMessageAsync();
+        const signature = await signMessageAsync({ message: signatureMessage });
         const userKeyPair = new Keypair(new PrivKey(signature));
         setKeyPair(userKeyPair);
       } catch (err) {
         console.error(err);
       }
     })();
-  }, [address, signMessageAsync]);
+  }, [address, signMessageAsync, signatureMessage]);
 
   useEffect(() => {
     setKeyPair(null);

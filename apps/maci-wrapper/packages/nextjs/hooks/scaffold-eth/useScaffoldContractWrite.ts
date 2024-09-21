@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { useContractWrite, useNetwork } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "~~/utils/scaffold-eth/contract";
 
-type UpdatedArgs = Parameters<ReturnType<typeof useContractWrite<Abi, string, undefined>>["writeAsync"]>[0];
+type UpdatedArgs = any;
 
 /**
  * Wrapper around wagmi's useContractWrite hook which automatically loads (by name) the contract ABI and address from
@@ -32,20 +32,12 @@ export const useScaffoldContractWrite = <
   ...writeConfig
 }: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
   const { targetNetwork } = useTargetNetwork();
 
-  const wagmiContractWrite = useContractWrite({
-    chainId: targetNetwork.id,
-    address: deployedContractData?.address,
-    abi: deployedContractData?.abi as Abi,
-    functionName: functionName as any,
-    args: args as unknown[],
-    value: value,
-    ...writeConfig,
-  });
+  const wagmiContractWrite = useWriteContract();
 
   const sendContractWriteTx = async ({
     args: newArgs,
@@ -68,14 +60,19 @@ export const useScaffoldContractWrite = <
       return;
     }
 
-    if (wagmiContractWrite.writeAsync) {
+    if (wagmiContractWrite.writeContractAsync) {
       try {
         setIsMining(true);
         const writeTxResult = await writeTx(
           () =>
-            wagmiContractWrite.writeAsync({
+            wagmiContractWrite.writeContractAsync({
+              chainId: targetNetwork.id,
+              address: deployedContractData?.address,
+              abi: deployedContractData?.abi as Abi,
+              functionName: functionName as any,
               args: newArgs ?? args,
               value: newValue ?? value,
+              ...writeConfig,
               ...otherConfig,
             }),
           { onBlockConfirmation, blockConfirmations },
