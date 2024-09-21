@@ -57,6 +57,14 @@ https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gat
 Trust assumption. The demo use non-decentralized infrastructure cloudflare worker for deployment, however that is good trade-off given it is only preview but not public websites. That could be replace by D1 compatabilie techstack such as tableland.
 
 
+### Proof of Build
+
+- Using Next.js static websites as an example, we can gather fingerprint from the build (under `/out` directory)
+ - routes (`/route1` create route1.html)
+ - file hashes (CID via multiformat package as used by ipfs)
+
+
+
 redirect derypted ipfs hash
 
 gateway can be switched and site is immutable
