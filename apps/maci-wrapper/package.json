@@ -34,6 +34,9 @@
     "vercel:yolo": "pnpm -F @maci-wrapper/nextjs run vercel:yolo",
     "download-zkeys": "pnpm -F @maci-wrapper/hardhat run download-zkeys"
   },
+  "dependencies": {
+    "@repo/ui": "workspace:*"
+  },
   "devDependencies": {
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3"

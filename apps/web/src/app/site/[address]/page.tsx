@@ -19,7 +19,11 @@ export default function Page({
           <Link className="tab tab-active" href="#" role="tab">
             Overview
           </Link>
-          <Link className="tab" href={`/proposals/${address}`} role="tab">
+          <Link
+            className="tab"
+            href={`/geist-app/proposals/${address}`}
+            role="tab"
+          >
             Proposals
           </Link>
         </div>

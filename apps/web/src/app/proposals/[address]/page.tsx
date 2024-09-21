@@ -16,7 +16,7 @@ export default function Page({
           className="tabs tabs-boxed border-2 border-neutral border-solid bg-base"
           role="tablist"
         >
-          <Link className="tab" role="tab" href={`/site/${address}`}>
+          <Link className="tab" role="tab" href={`/geist-app/site/${address}`}>
             Overview
           </Link>
           <Link className="tab tab-active" role="tab" href="#">

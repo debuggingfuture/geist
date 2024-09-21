@@ -19,6 +19,10 @@ importers:
         version: 2.1.2
 
   apps/maci-wrapper:
+    dependencies:
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
     devDependencies:
       husky:
         specifier: ^8.0.1
