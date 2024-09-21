@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { SITE_DATA } from "~~/constants/site-data";
+import { useGetGeistSubnames } from "~~/hooks/geist-app/useGetGeistSubnames";
 
 function AutonomousSiteCard({ name, ensName }: { name: string; ensName: string }): JSX.Element {
   return (
@@ -13,6 +15,12 @@ function AutonomousSiteCard({ name, ensName }: { name: string; ensName: string }
 }
 
 export default function Page(): JSX.Element {
+  const { data: subNames, isLoading } = useGetGeistSubnames("ethsg24.eth");
+
+  useEffect(() => {
+    if (subNames) console.debug({ subNames });
+  }, [subNames, isLoading]);
+
   return (
     <main className="flex flex-col gap-6 justify-between px-6">
       <h1 className="text-3xl font-bold">Autonomous Sites</h1>
