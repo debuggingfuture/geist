@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bouncy Ethereum Balls</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #ecf0f1;
+      }
+      .ball {
+        position: absolute;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const images = [
+        "./vitalik.jpg", // Placeholder for Vitalik Buterin image
+        "./eth.svg", // Placeholder for Ethereum logo
+      ];
+
+      const balls = [];
+      const numBalls = 15;
+      const minSize = 80;
+      const maxSize = 150;
+
+      function createBall() {
+        const ball = document.createElement("div");
+        ball.classList.add("ball");
+        const size = Math.random() * (maxSize - minSize) + minSize;
+        ball.style.width = `${size}px`;
+        ball.style.height = `${size}px`;
+        ball.style.backgroundImage = `url(${
+          images[Math.floor(Math.random() * images.length)]
+        })`;
+        ball.style.left = `${Math.random() * (window.innerWidth - size)}px`;
+        ball.style.top = `${Math.random() * (window.innerHeight - size)}px`;
+        document.body.appendChild(ball);
+
+        const speed = {
+          x: (Math.random() - 0.5) * 10,
+          y: (Math.random() - 0.5) * 10,
+        };
+
+        balls.push({ element: ball, size, speed });
+      }
+
+      function moveBalls() {
+        balls.forEach((ball) => {
+          let rect = ball.element.getBoundingClientRect();
+
+          if (
+            rect.left + ball.speed.x < 0 ||
+            rect.right + ball.speed.x > window.innerWidth
+          ) {
+            ball.speed.x = -ball.speed.x;
+          }
+          if (
+            rect.top + ball.speed.y < 0 ||
+            rect.bottom + ball.speed.y > window.innerHeight
+          ) {
+            ball.speed.y = -ball.speed.y;
+          }
+
+          ball.element.style.left = `${rect.left + ball.speed.x}px`;
+          ball.element.style.top = `${rect.top + ball.speed.y}px`;
+        });
+
+        requestAnimationFrame(moveBalls);
+      }
+
+      for (let i = 0; i < numBalls; i++) {
+        createBall();
+      }
+
+      moveBalls();
+    </script>
+  </body>
+</html>
