@@ -1,0 +1,9 @@
+{
+    "sites": [
+      {
+        "slug": "late-accident-billions",
+        "distDir": "apps/docs/out",
+        "buildCommand": " pnpm --filter docs run build"
+      }
+    ]
+  }

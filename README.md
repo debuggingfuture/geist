@@ -49,15 +49,38 @@ ERC-3668
 https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gateway-interface
 
 
+### custom Hybrid resolver
+-  we deployed a Hybrid resolver which is able to rresolve for both on off chain data
+
+
+### custom whitelist
+Trust assumption. The demo use non-decentralized infrastructure cloudflare worker for deployment, however that is good trade-off given it is only preview but not public websites. That could be replace by D1 compatabilie techstack such as tableland.
+
+
+redirect derypted ipfs hash
+
+gateway can be switched and site is immutable
+
 
 Brave deprecated ipfs://
 https://github.com/brave/brave-browser/issues/37735
+
+
+- Contracts Cloned from template https://github.com/ensdomains/offchain-resolver
+- Fork 
+https://github.com/debuggingfuture/ens-offchain-registrar
 
 
 ## Notes
 ### ENS contract address - testnet
 https://docs.ens.domains/learn/deployments
 https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
+#### Deploy Offchain resolver
+- https://ccip.tools/
+
+## cf workers logs
+https://dash.cloudflare.com/c91d52c288c452ab734ede1518b00e11/workers/services/view/ens-gateway/production/logs/live
+
 
 
 ### Apps and Packages

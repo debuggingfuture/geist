@@ -1,5 +1,5 @@
 {
-  "name": "docs",
+  "name": "wrapper-site",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -10,10 +10,16 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@dynamic-labs/ethereum": "^3.1.0",
+    "@dynamic-labs/sdk-react-core": "^3.1.0",
+    "@dynamic-labs/wagmi-connector": "^3.1.0",
     "@repo/ui": "workspace:*",
+    "@tanstack/react-query": "^5.56.2",
     "next": "^14.2.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "viem": "^2.21.10",
+    "wagmi": "^2.12.12"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.2.3",
