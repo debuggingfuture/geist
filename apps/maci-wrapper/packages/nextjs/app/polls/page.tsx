@@ -20,8 +20,8 @@ export default function Polls() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/geist-app/proposals/6");
-  }, []);
+    if (totalPolls > 0) router.push(`/polls/${totalPolls - 1}`);
+  }, [router, totalPolls]);
 
   return (
     <div className="container mx-auto pt-10">
