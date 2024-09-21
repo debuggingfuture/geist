@@ -233,7 +233,7 @@ export default function PollDetail({ id }: { id: bigint }) {
             <VoteCard
               pollOpen={status === PollStatus.OPEN}
               index={index}
-              ensLink={`http://${ensSubnames[index].name}`}
+              ensLink={`https://gateway.geist.network/?target=${ensSubnames[index].name}`}
               candidate={candidate}
               clicked={false}
               pollType={pollType}
