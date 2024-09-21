@@ -20,7 +20,7 @@ export default function Polls() {
   const router = useRouter();
 
   useEffect(() => {
-    if (totalPolls > 0) router.push(`/polls/${totalPolls - 1}`);
+    if (totalPolls > 0) router.replace(`/polls/${totalPolls - 1}`);
   }, [router, totalPolls]);
 
   return (

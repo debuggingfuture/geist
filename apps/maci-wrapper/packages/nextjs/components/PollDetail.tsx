@@ -12,6 +12,7 @@ import { getPollStatus } from "~~/hooks/useFetchPolls";
 import { PollStatus, PollType } from "~~/types/poll";
 import { getDataFromPinata } from "~~/utils/pinata";
 import { notification } from "~~/utils/scaffold-eth";
+import { useGetGeistSubnames } from "~~/hooks/geist-app/useGetGeistSubnames";
 
 export default function PollDetail({ id }: { id: bigint }) {
   const { data: poll, error, isLoading } = useFetchPoll(id);
@@ -26,6 +27,8 @@ export default function PollDetail({ id }: { id: bigint }) {
   const isAnyInvalid = Object.values(isVotesInvalid).some(v => v);
   const [result, setResult] = useState<{ candidate: string; votes: number }[] | null>(null);
   const [status, setStatus] = useState<PollStatus>();
+
+  const { data: ensSubnames, isLoading: isEnsLoading } = useGetGeistSubnames("ethsg24.eth");
 
   useEffect(() => {
     if (!poll || !poll.metadata) {
@@ -213,7 +216,7 @@ export default function PollDetail({ id }: { id: bigint }) {
     }
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || isEnsLoading) return <div>Loading...</div>;
 
   if (error) return <div>Poll not found</div>;
 
@@ -221,13 +224,16 @@ export default function PollDetail({ id }: { id: bigint }) {
     <div className="container mx-auto pt-10">
       <div className="flex h-full flex-col md:w-2/3 lg:w-1/2 mx-auto">
         <div className="flex flex-row items-center my-5">
-          <div className="text-2xl font-bold ">Vote for {poll?.name}</div>
+          <div className="text-2xl font-bold ">
+            Vote for <span className="text-primary">{poll?.name}</span>
+          </div>
         </div>
         {poll?.options.map((candidate, index) => (
           <div className="pb-5 flex" key={index}>
             <VoteCard
               pollOpen={status === PollStatus.OPEN}
               index={index}
+              ensLink={`http://${ensSubnames[index].name}`}
               candidate={candidate}
               clicked={false}
               pollType={pollType}
