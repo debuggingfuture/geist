@@ -3,6 +3,7 @@ import { Router, createCors, json } from 'itty-router'
 import { Env } from './env'
 import { getCcipRead, getName, getNames, setName } from './handlers'
 import { postCcipRead } from './handlers/postCcipRead'
+import { getEncrypt } from './handlers/getEncrypt'
 
 const { preflight, corsify } = createCors({
   origins: ['*'],
@@ -19,6 +20,7 @@ router
   .post('/lookup/:sender', (request, env) =>
     postCcipRead(request, env)
   )
+  .get('/encrypt/:hash', (request, env) => getEncrypt(request, env))
   .get('/get/:name', (request, env) => getName(request, env))
   .get('/names', (request, env) => getNames(env))
   .post('/set', (request, env) => setName(request, env))

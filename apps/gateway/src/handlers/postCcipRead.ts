@@ -13,12 +13,11 @@ import {
 } from 'viem/utils'
 import { z } from 'zod'
 
-import {importKeyFromJwk} from './functions/utils';
+import {ENCRYPTION_KEY_JWK, importKeyFromJwk} from './functions/utils';
 import jwt from '@tsndr/cloudflare-worker-jwt';
 import { handleQuery } from '../ccip-read/query'
 import { resolverAbi } from '../ccip-read/utils'
 import { Env } from '../env'
-import { ENCRYPTION_KEY_JWK } from './encrypt'
 
 const schema = z.object({
   sender: z.string().refine((data) => isAddress(data)),
@@ -138,9 +137,6 @@ async function decrypt(encryptedData:any, key:any) {
 // Implements EIP-3668
 // https://eips.ethereum.org/EIPS/eip-3668
 export const postCcipRead = async (request: IRequest, env: Env) => {
-
-
-  
 
 
   const safeParse = schema.safeParse(request.params)
