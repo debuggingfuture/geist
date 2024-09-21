@@ -56,9 +56,10 @@ https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gat
 
 ### custom Hybrid resolver
 - we deployed a Hybrid resolver which is able to resolve both on and off chain data.
-- source code of gateway is under `apps/worker`, originally maintained at separate forked repository [ens-offchain-registrar](
+- source code of gateway is under `apps/gateway`, originally maintained at separate forked repository [ens-offchain-registrar](
 https://github.com/debuggingfuture/ens-offchain-registrar)
 
+Current fleek is used as ipfs gateway and to ease deployment & faster pinning, while it is not necessary as we could run own ipfs nodes
 
 ### custom whitelist
 Trust assumption. The demo use non-decentralized infrastructure cloudflare worker for deployment, however that is good trade-off given it is only preview but not public websites. That could be replace by D1 compatabilie techstack such as tableland.

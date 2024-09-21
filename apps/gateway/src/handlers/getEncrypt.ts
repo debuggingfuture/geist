@@ -19,8 +19,7 @@ const schema = zod.object({
 
 //   const db = createKysely(env)
 
-console.log(safeParse.data.hash)
-const message = "bafybeifr5olumz4wa4z2hvyhj2qh74z6q5uc2fw3tdhzaqqhk3jdxlc3se";
+  const message = safeParse.data.hash || "bafybeifr5olumz4wa4z2hvyhj2qh74z6q5uc2fw3tdhzaqqhk3jdxlc3se";
 
   const key = await importKeyFromJwk(ENCRYPTION_KEY_JWK);
 //   // const key = await generateKey();
