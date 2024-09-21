@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {OffchainResolver} from "../src/OffchainResolver.sol";
+import {HybridResolver} from "../src/HybridResolver.sol";
 
 contract CounterScript is Script {
     function setUp() public {}
@@ -17,14 +17,18 @@ contract CounterScript is Script {
         // sepolia
         address registrator = 0x5a07C75Ae469Bf3ee2657B588e8E6ABAC6741b4f;
 
+        // If the URL template does not contain the {data} substitution parameter, the client MUST send a POST request
+        // data is contract callData
 
-        string memory url = "https://example.com";
+        string memory url = "https://ens-gateway.debuggingfuturecors.workers.dev/lookup/{sender}/{data}.json";
         address[] memory signers = new address[](2);
         signers[0] = 0x7f890c611c3B5b8Ff44FdF5Cf313FF4484a2D794;
         signers[1] = 0x0987654321098765432109876543210987654321;
 
-        // Deploy the OffchainResolver contract
-        OffchainResolver resolver = new OffchainResolver(url, signers);
+        // Deploy the HybridResolver contract
+        HybridResolver resolver = new HybridResolver(url, signers);
+
+        
 
 
 
