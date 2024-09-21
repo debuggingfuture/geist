@@ -5,9 +5,9 @@
 import { GenericContractsDeclaration } from "../utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  31337: {
+  11155420: {
     ConstantInitialVoiceCreditProxy: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0x6652Ff4Da11f1ab0CE52f32D351924EEA4AEAB9E",
       abi: [
         {
           inputs: [
@@ -45,10 +45,10 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 1,
+      deploymentBlockNumber: 17550919,
     },
     FreeForAllGatekeeper: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      address: "0xd0e54b4D24e823FA5e9ec4c320f53f9d59DACb40",
       abi: [
         {
           inputs: [],
@@ -100,10 +100,10 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 3,
+      deploymentBlockNumber: 17550924,
     },
     MACIWrapper: {
-      address: "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+      address: "0x459A9b69CB9177699d37dBDFc47bd1deFaed31Db",
       abi: [
         {
           inputs: [
@@ -250,29 +250,6 @@ const deployedContracts = {
               internalType: "uint256",
               name: "_coordinatorPubKeyY",
               type: "uint256",
-            },
-            {
-              components: [
-                {
-                  internalType: "address",
-                  name: "poll",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "messageProcessor",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "tally",
-                  type: "address",
-                },
-              ],
-              indexed: false,
-              internalType: "struct MACI.PollContracts",
-              name: "pollAddr",
-              type: "tuple",
             },
             {
               indexed: false,
@@ -563,30 +540,7 @@ const deployedContracts = {
             },
           ],
           name: "deployPoll",
-          outputs: [
-            {
-              components: [
-                {
-                  internalType: "address",
-                  name: "poll",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "messageProcessor",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "tally",
-                  type: "address",
-                },
-              ],
-              internalType: "struct MACI.PollContracts",
-              name: "pollAddr",
-              type: "tuple",
-            },
-          ],
+          outputs: [],
           stateMutability: "nonpayable",
           type: "function",
         },
@@ -806,9 +760,26 @@ const deployedContracts = {
           name: "getPoll",
           outputs: [
             {
-              internalType: "address",
-              name: "poll",
-              type: "address",
+              components: [
+                {
+                  internalType: "address",
+                  name: "poll",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "messageProcessor",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "tally",
+                  type: "address",
+                },
+              ],
+              internalType: "struct MACI.PollContracts",
+              name: "pollContracts",
+              type: "tuple",
             },
           ],
           stateMutability: "view",
@@ -1249,7 +1220,17 @@ const deployedContracts = {
           outputs: [
             {
               internalType: "address",
-              name: "",
+              name: "poll",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "messageProcessor",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "tally",
               type: "address",
             },
           ],
@@ -1532,10 +1513,10 @@ const deployedContracts = {
         stateTreeDepth: "maci-contracts/contracts/MACI.sol",
         tallyFactory: "maci-contracts/contracts/MACI.sol",
       },
-      deploymentBlockNumber: 21,
+      deploymentBlockNumber: 17550966,
     },
     MessageProcessorFactory: {
-      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+      address: "0xea6deC972A3D2b2CaBe33d3Cd2AEd6d270c59659",
       abi: [
         {
           inputs: [],
@@ -1590,20 +1571,15 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 17,
+      deploymentBlockNumber: 17550956,
     },
     PollFactory: {
-      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      address: "0x0b97f1C27cb8A7474260f037615788CD4c444872",
       abi: [
         {
           inputs: [],
           stateMutability: "payable",
           type: "constructor",
-        },
-        {
-          inputs: [],
-          name: "InvalidMaxValues",
-          type: "error",
         },
         {
           inputs: [],
@@ -1624,23 +1600,6 @@ const deployedContracts = {
               internalType: "uint256",
               name: "_duration",
               type: "uint256",
-            },
-            {
-              components: [
-                {
-                  internalType: "uint256",
-                  name: "maxMessages",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "maxVoteOptions",
-                  type: "uint256",
-                },
-              ],
-              internalType: "struct Params.MaxValues",
-              name: "_maxValues",
-              type: "tuple",
             },
             {
               components: [
@@ -1709,10 +1668,10 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 15,
+      deploymentBlockNumber: 17550950,
     },
     PoseidonT3: {
-      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      address: "0x7Ef129B61f891901bd242fc7e7E60EE280307fC6",
       abi: [
         {
           inputs: [
@@ -1734,10 +1693,10 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 7,
+      deploymentBlockNumber: 17550932,
     },
     PoseidonT4: {
-      address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      address: "0x421fD19F0eF39f468e38B48c376CeDa90aC41e7e",
       abi: [
         {
           inputs: [
@@ -1759,10 +1718,10 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 9,
+      deploymentBlockNumber: 17550935,
     },
     PoseidonT5: {
-      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      address: "0x30758ea8E60788F6D1b46CD821EC8511520a9e87",
       abi: [
         {
           inputs: [
@@ -1784,10 +1743,10 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 11,
+      deploymentBlockNumber: 17550940,
     },
     PoseidonT6: {
-      address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      address: "0x5Edaa3a047d1ad265F2f1C8A78b9ef15e7B58c5f",
       abi: [
         {
           inputs: [
@@ -1809,10 +1768,10 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 13,
+      deploymentBlockNumber: 17550945,
     },
     TallyFactory: {
-      address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+      address: "0xD63ed3B27e85E73Dc9bbd840D6c75f5D6B30F5f2",
       abi: [
         {
           inputs: [],
@@ -1872,10 +1831,10 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 19,
+      deploymentBlockNumber: 17550961,
     },
     Verifier: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0xb1b54e88b8E79c35564B773fE63ab923aB1Cd327",
       abi: [
         {
           inputs: [],
@@ -2015,9 +1974,9 @@ const deployedContracts = {
               type: "tuple",
             },
             {
-              internalType: "uint256",
-              name: "input",
-              type: "uint256",
+              internalType: "uint256[]",
+              name: "inputs",
+              type: "uint256[]",
             },
           ],
           name: "verify",
@@ -2032,10 +1991,10 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 5,
+      deploymentBlockNumber: 17550927,
     },
     VkRegistry: {
-      address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+      address: "0xe527A749f7e45c8F4Deb132cEb3651B014c52A70",
       abi: [
         {
           inputs: [],
@@ -3295,7 +3254,7 @@ const deployedContracts = {
           type: "function",
         },
       ],
-      deploymentBlockNumber: 24,
+      deploymentBlockNumber: 17550976,
     },
   },
 } as const;
