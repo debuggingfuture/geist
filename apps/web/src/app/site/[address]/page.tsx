@@ -1,7 +1,11 @@
-/* eslint-disable jsx-a11y/anchor-is-valid -- disable href for daisy ui tabs*/
 import Badge from "@repo/ui/badge";
+import Link from "next/link";
 
-export default function Page(): JSX.Element {
+export default function Page({
+  params: { address },
+}: {
+  params: { address: string };
+}): JSX.Element {
   return (
     <main className="flex flex-col gap-6 justify-between px-6">
       <div className="flex justify-between items-center">
@@ -12,12 +16,12 @@ export default function Page(): JSX.Element {
           className="tabs tabs-boxed border-2 border-neutral border-solid bg-base"
           role="tablist"
         >
-          <a className="tab tab-active" role="tab">
+          <Link className="tab tab-active" href="#" role="tab">
             Overview
-          </a>
-          <a className="tab" role="tab">
+          </Link>
+          <Link className="tab" href={`/proposals/${address}`} role="tab">
             Proposals
-          </a>
+          </Link>
         </div>
       </div>
 
