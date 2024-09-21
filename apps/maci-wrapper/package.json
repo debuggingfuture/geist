@@ -1,0 +1,41 @@
+{
+  "name": "maci-wrapper",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/hardhat",
+      "packages/nextjs"
+    ]
+  },
+  "scripts": {
+    "account": "pnpm -F @maci-wrapper/hardhat run account",
+    "chain": "pnpm -F @maci-wrapper/hardhat run chain",
+    "fork": "pnpm -F @maci-wrapper/hardhat run fork",
+    "deploy": "pnpm -F @maci-wrapper/hardhat run deploy",
+    "verify": "pnpm -F @maci-wrapper/hardhat run verify",
+    "hardhat-verify": "pnpm -F @maci-wrapper/hardhat run hardhat-verify",
+    "compile": "pnpm -F @maci-wrapper/hardhat run compile",
+    "generate": "pnpm -F @maci-wrapper/hardhat run generate",
+    "flatten": "pnpm -F @maci-wrapper/hardhat run flatten",
+    "hardhat:lint": "pnpm -F @maci-wrapper/hardhat run lint",
+    "hardhat:lint-staged": "pnpm -F @maci-wrapper/hardhat run lint-staged",
+    "hardhat:format": "pnpm -F @maci-wrapper/hardhat run format",
+    "hardhat:test": "pnpm -F @maci-wrapper/hardhat run test",
+    "test": "npm run hardhat:test",
+    "format": "yarn next:format && yarn hardhat:format",
+    "dev": "pnpm -F @maci-wrapper/nextjs run dev",
+    "next:lint": "pnpm -F @maci-wrapper/nextjs run lint",
+    "next:format": "pnpm -F @maci-wrapper/nextjs run format",
+    "next:check-types": "pnpm -F @maci-wrapper/nextjs run check-types",
+    "next:build": "pnpm -F @maci-wrapper/nextjs run build",
+    "precommit": "lint-staged",
+    "vercel": "pnpm -F @maci-wrapper/nextjs run vercel",
+    "vercel:yolo": "pnpm -F @maci-wrapper/nextjs run vercel:yolo",
+    "download-zkeys": "pnpm -F @maci-wrapper/hardhat run download-zkeys"
+  },
+  "devDependencies": {
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3"
+  }
+}
