@@ -10,14 +10,15 @@ Allow DAOs to have private preview on websites collaborate and vote builds, redu
 
 ## What
 
-Today, one can build a static website that is censorship resistent, decentralized by hosting it on IPFS, with resolution handled by ens domain. Websites can be updated via IPNS wiith immutable content trails and made persistent with IPFS pinnings. Great tools such as eth.limo and fleek made such approach user friendly.
-
+Today, one can build a static dWebsite that is censorship resistent, decentralized by hosting it on IPFS, with resolution handled by ens domain. Websites can be updated via IPNS wiith immutable content trails and made persistent with IPFS pinnings. Great tools such as eth.limo and fleek made such approach user friendly. 
 
 Pairing with smart contract, we can create dApp comprised of UI and fully on-chain application states that benefit from security and governance mechanism of Ethereum.
 
 A simple example is a static website that only visualize smart contract states, in a sense it works similar as a dynamic NFT. 
 
 ## Challenges of DAW
+
+As billions of websites are not decentralized, we explore challenges and opportunites for making dWebsite greater.
 
 ### Private Preview for DAO collaboraitons
 Existing platforms such as Github, Vercel are hard to utilized by DAO teams.
