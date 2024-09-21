@@ -35,7 +35,7 @@
     "download-zkeys": "pnpm -F @maci-wrapper/hardhat run download-zkeys"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*"
+    "@repo/ui": "workspace:../../packages/ui"
   },
   "devDependencies": {
     "husky": "^8.0.1",
