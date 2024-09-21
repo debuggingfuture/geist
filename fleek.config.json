@@ -2,8 +2,8 @@
     "sites": [
       {
         "slug": "late-accident-billions",
-        "distDir": "apps/docs/out",
-        "buildCommand": " pnpm --filter docs run build"
+        "distDir": "apps/wrapper-site/out",
+        "buildCommand": " pnpm --filter wrapper-site run build"
       }
     ]
   }
