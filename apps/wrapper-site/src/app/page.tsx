@@ -8,7 +8,7 @@ import {
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, Suspense, useEffect, useState } from "react";
 import { http } from "viem";
 import { optimism, optimismSepolia, sepolia } from "viem/chains";
 import { createConfig, useAccount, useEnsAddress, useEnsResolver, useEnsText, useSignMessage, WagmiProvider } from "wagmi";
@@ -234,7 +234,9 @@ function Page(): JSX.Element {
 export default function PageWrapper(): JSX.Element {
   return (
     <Providers>
-      <Page />
+      <Suspense>
+        <Page />
+      </Suspense>
     </Providers>
   );
 }
