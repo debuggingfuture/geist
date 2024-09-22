@@ -1,7 +1,6 @@
 
 ## 🤖 Geist
 
-
 Geist is a Decentralized Autonomous Website (DAW) Builder.
 Wallet Whitelist for Private Previews, Trustless zk-proof based deployment after DAO proposal voting, we allow DAOs to collaborate at scale and make the Internet more trustless.
 
@@ -12,7 +11,7 @@ Wallet Whitelist for Private Previews, Trustless zk-proof based deployment after
 
 Today, one can build a static dWebsite that is censorship resistent, decentralized by hosting it on IPFS, with resolution handled by ENS domain. Websites can be updated via IPNS wiith immutable content trails and made persistent with IPFS pinnings. Great tools such as eth.limo and fleek made such approach user friendly. Pairing with smart contract, we can create autonomous dApp comprised of UI and fully on-chain application states that benefit from security and governance mechanism of Ethereum.
 
-As billions of websites are not decentralized today, we explore challenges and opportunites for making dWebsite greater.
+As billions of websites are not decentralized today, we explore challenges and opportunites for making dWebsite greater and more autonomous.
 
 We build Geist to support DAW by removing trust assumptions in development & deployment, add private previews to website and support anti collusion voting, so we can say good bye to seat-based pricing centralization tools and for DAO to collaborate at scale. 
 
@@ -25,10 +24,10 @@ In particualr, private previews and review/voting on proposal are often essentia
 
 ### WEB3 Identity unfriendly
 
-Existing platforms such as Github, Vercel are hard to be utilized by large, diverse group of contributors, due to high seat-based pricing and lack of web3-identity (e.g. wallets/ens) based access control mechanisms. 
+Existing platforms such as Github, Vercel are hard to be utilized by large, diverse group of contributors, due to high seat-based pricing and lack of web3-identity (e.g. wallets/ens) based access control mechanisms. On-chain whitelist is often prohibitive due to inflexibility and cost.
 
 ### Privileged Access Everywhere
-Websites deployment are subject to all sort of attack vectors, from DNS registrar, supply chain attack at NPM to various hosting concerns. Censorship resistance is not guarantee on hosted platforms and pipelines always require priviledged access.
+Websites deployment are subject to all sort of attack vectors, from DNS registrar, supply chain attack to various hosting concerns. Censorship resistance is not guarantee on hosted platforms and pipelines always require priviledged access.
 
 We would like to bring on-chain security to make websites more autonomous, add guardrails and make changes more trackable?
 We see a lot of use cases from DAW, from displaying censorship-sensitive key information, Whistle Bowling, Crowdfunding, Community Notes, Internet Archive to where fair mechanisms is in need such  Autonomous World or Advertisement.
@@ -36,26 +35,26 @@ We see a lot of use cases from DAW, from displaying censorship-sensitive key inf
 
 ## How it works
 
-### Custom ENS Gateway for private preview
+### Whitelist Gateway base on ENS for Private preview
 
-It is capable to allow only whitelisted user to visit website previews hosted on IPFS.
-For each preview websites, users will be routed to our UI gateway for whitelist handling.
-With CCIP protocol, we deployed a Hybrid resolver which is able to resolve both on and off chain data.
-The resolver will resolve encrypted hash at TXT record and attach token to custom gateway for authentication. 
-UI Gateway will redirect user given derypted ipfs hash response if user is whitelisted.
+We host websites preview on IPFS encrypted behind our gateway website. 
+Users are required to visit gateway and sign with wallet to for access. With CCIP protocol, we deployed a Hybrid resolver which is able to resolve both on and off chain data. The resolver will resolve encrypted hash at TXT record of target domain and attach token to custom gateway for authentication. UI Gateway will redirect user given derypted ipfs hash response if user is whitelisted.
+
 
 ### Website proposal voting via MINA
 - we use MACI to support users to decide which version of proposed website can be deployed.
+- A zk proof on the tally results will be generated and can be associated with the build.
+
 
 ### Trustless deployment via MINA based ZK Proofs
 
 - Proof of Build is created for each website build
-  - Using Next.js static websites as an example, we can gather fingerprint from the build (under `/out` directory)
-  - routes (`/route1` create route1.html)
-  - file hashes (CID via multiformat package as used by ipfs)
-  - such proof of build is associated to the MACI proposal
+  - Using Next.js static websites as an example, we can gather fingerprint from the build (under `/out` directory) including
+    - routes (`/route1` create route1.html)
+    - file hashes (CID via multiformat package as used by ipfs)
+    - MACI of proposal
 
-- We use MINA chain to verify the build to be deployed is in line with proposal, by creating merkle map 
+- We use MINA chain to verify the build to be deployed is in line with proposal, by creating merkle map and and comparing against on-chain commitment
 
 - In future, it is possible to further automate the trustless process once Protokit is able to roll up to L1 and the production EVM bridge is deployed.
 
