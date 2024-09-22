@@ -29,8 +29,6 @@ export class Build extends RuntimeModule<BuildConfig> {
 
     @state() approvalProof = State.from<Field>(Field);
 
-    // @state() witness = State.from<BuildMerkleWitness>(BuildMerkleWitness);
-
 
   /**
    * Given a build, generated proof of routes, files and approval (from voting)
@@ -83,7 +81,6 @@ export class Build extends RuntimeModule<BuildConfig> {
       buildProof: Field,
   ): Promise<void> {
     let root = await this.root.get();
-    console.log('ok', root.value)
 
     assert(buildProof.equals(root.value), 'YOU SHALL NOT PASS!');
 
@@ -101,6 +98,7 @@ export class Build extends RuntimeModule<BuildConfig> {
 
     console.log('deploy the site');
 
+    // generate signature for contract approval
 
   }
 

@@ -61,9 +61,10 @@ export function stringifyNameForDb(
 }
 
 
-function arrayBufferToBase64(buffer:any) {
+export function arrayBufferToBase64(buffer:any) {
   return btoa(String.fromCharCode.apply(null, [...new Uint8Array(buffer)]));
 }
+
 
 function base64ToArrayBuffer(base64:string) {
   const binaryString = atob(base64);
@@ -74,6 +75,17 @@ function base64ToArrayBuffer(base64:string) {
   return bytes.buffer;
 }
 
+
+export const ENCRYPTION_KEY_JWK = {
+  "kty": "oct",
+  "key_ops": [
+      "encrypt",
+      "decrypt"
+  ],
+  "alg": "A256GCM",
+  "ext": true,
+  "k": "O2URt6f4xF_pQDLAiT3VWWuLee-YQHDhOOFEJHv8SHE"
+};
 
 export async function importKeyFromJwk(jwk:any) {
   return await crypto.subtle.importKey(
@@ -117,3 +129,27 @@ return new TextEncoder().encode(str);
 function ab2str(buf:any) {
 return new TextDecoder().decode(buf);
 }
+
+
+// Encrypt function
+export async function encrypt(plaintext:string, key:any) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encodedText = str2ab(plaintext);
+  
+  const ciphertext = await crypto.subtle.encrypt(
+    {
+      name: "AES-GCM",
+      iv: iv
+    },
+    key,
+    encodedText
+  );
+  
+  const encryptedData = new Uint8Array(iv.length + ciphertext.byteLength);
+  encryptedData.set(iv);
+  encryptedData.set(new Uint8Array(ciphertext), iv.length);
+  
+  return encryptedData;
+}
+
+

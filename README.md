@@ -1,86 +1,74 @@
 ## 🤖 Geist
 
-Decentralized Autonomous Website (DAW) Builder.
-Wallet whitelist for Private Previews. Trustless Deployment after proposal voting.
-
-Make websites truely decentralize by remove trust assumptions in development & deployment, good bye to seat based pricing for collaborations.
-Allow DAOs to have private preview on websites collaborate and vote builds, reduce trust assumptions of website deployment by introducing zk proofs and custom ENS resolver.
+Geist is a Decentralized Autonomous Website (DAW) Builder.
+Wallet Whitelist for Private Previews, Trustless zk-proof based deployment after DAO proposal voting, we allow DAOs to collaborate at scale and make the Internet more trustless.
 
 ## What
+[ETHGlobal SG 24 Submission](https://ethglobal.com/showcase/geist-x3fur) | [Presentation](https://www.canva.com/design/DAGRQswuImw/flSJSrH9k9sLXKJd2LzeVg/edit?utm_content=DAGRQswuImw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-Today, one can build a static dWebsite that is censorship resistent, decentralized by hosting it on IPFS, with resolution handled by ens domain. Websites can be updated via IPNS wiith immutable content trails and made persistent with IPFS pinnings. Great tools such as eth.limo and fleek made such approach user friendly.
 
-Pairing with smart contract, we can create dApp comprised of UI and fully on-chain application states that benefit from security and governance mechanism of Ethereum.
+Today, one can build a static dWebsite that is censorship resistent, decentralized by hosting it on IPFS, with resolution handled by ENS domain. Websites can be updated via IPNS wiith immutable content trails and made persistent with IPFS pinnings. Great tools such as eth.limo and fleek made such approach user friendly. Pairing with smart contract, we can create autonomous dApp comprised of UI and fully on-chain application states that benefit from security and governance mechanism of Ethereum.
 
-A simple example is a static website that only visualize smart contract states, in a sense it works similar as a dynamic NFT.
+As billions of websites are not decentralized today, we explore challenges and opportunites for making dWebsite greater and more autonomous.
+
+We build Geist to support DAW by removing trust assumptions in development & deployment, add private previews to website and support anti collusion voting, so we can say good bye to seat-based pricing centralization tools and for DAO to collaborate at scale. 
 
 ## Challenges of DAW
 
-As billions of websites are not decentralized, we explore challenges and opportunites for making dWebsite greater.
+### Lack of Privacy
 
-### Private Preview for DAO collaboraitons
+IPFS has no content encryption and teams or DAOs always fallback to small trusted core team and centralized identity for collaboration.  
+In particualr, private previews and review/voting on proposal are often essential for websites.
 
-Existing platforms such as Github, Vercel are hard to utilized by DAO teams.
-High seat-based pricing and lack of gate access control mechanisms with web3 identity (e.g. wallets), made typical DAO collaboration impossible.
+### WEB3 Identity unfriendly
 
-In particualr, private previews and review/voting on proposal are often essential for websites, while IPFS has no content encryption and teams fallback to small trusted core team andcentralized identity for collaboration.
+Existing platforms such as Github, Vercel are hard to be utilized by large, diverse group of contributors, due to high seat-based pricing and lack of web3-identity (e.g. wallets/ens) based access control mechanisms. On-chain whitelist is often prohibitive due to inflexibility and cost.
 
-To solve this, we create web3 identity friendly whitelist mechanism for website previews. Whitelist is made free.
+### Privileged Access Everywhere
+Websites deployment are subject to all sort of attack vectors, from DNS registrar, supply chain attack to various hosting concerns. Censorship resistance is not guarantee on hosted platforms and pipelines always require priviledged access.
 
-### Trusted
+We would like to bring on-chain security to make websites more autonomous, add guardrails and make changes more trackable?
+We see a lot of use cases from DAW, from displaying censorship-sensitive key information, Whistle Bowling, Crowdfunding, Community Notes, Internet Archive to where fair mechanisms is in need such  Autonomous World or Advertisement.
 
-Websites subject to all sort of attack vectors, from DNS registrar, supply chain attack at NPM to various hosting concerns. Censorship resistance is not guarantee on hosted platforms and pipelines always require priviledged access.
-
-How could we bring on-chain security to make websites more autonomous, add guardrails and make changes more trackable?
-
-We see a lot of use cases from DAW, from displaying censorship-sensitive key information, Whistle Bowling, Crowdfunding, Community Notes, Internet Archive to where fair mechanisms is in need such Autonomous World or Advertisement.
-
-### Resolver routes
 
 ## How it works
 
-### References
+### Whitelist Gateway base on ENS for Private preview
 
-[ENSIP-7: Contenthash field](https://docs.ens.domains/ensip/7)
+We host websites preview on IPFS encrypted behind our gateway website. 
+Users are required to visit gateway and sign with wallet to for access. With CCIP protocol, we deployed a Hybrid resolver which is able to resolve both on and off chain data. The resolver will resolve encrypted hash at TXT record of target domain and attach token to custom gateway for authentication. UI Gateway will redirect user given derypted ipfs hash response if user is whitelisted.
 
-[ENSIP-10: Wildcard Resolution]
 
-ERC-3668
-https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gateway-interface
-
-### custom Hybrid resolver
+### Website proposal voting via MINA
+- we use MACI to support users to decide which version of proposed website can be deployed.
+- A zk proof on the tally results will be generated and can be associated with the build.
 
 - we deployed a Hybrid resolver which is able to resolve both on and off chain data.
 - source code of gateway is under `apps/worker`, originally maintained at separate forked repository [ens-offchain-registrar](https://github.com/debuggingfuture/ens-offchain-registrar)
 
-### custom whitelist
+### Trustless deployment via MINA based ZK Proofs
 
-Trust assumption. The demo use non-decentralized infrastructure cloudflare worker for deployment, however that is good trade-off given it is only preview but not public websites. That could be replace by D1 compatabilie techstack such as tableland.
+- Proof of Build is created for each website build
+  - Using Next.js static websites as an example, we can gather fingerprint from the build (under `/out` directory) including
+    - routes (`/route1` create route1.html)
+    - file hashes (CID via multiformat package as used by ipfs)
+    - MACI of proposal
 
-### Proof of Build
+- We use MINA chain to verify the build to be deployed is in line with proposal, by creating merkle map and and comparing against on-chain commitment
 
-- Using Next.js static websites as an example, we can gather fingerprint from the build (under `/out` directory)
-- routes (`/route1` create route1.html)
-- file hashes (CID via multiformat package as used by ipfs)
-
-redirect derypted ipfs hash
-
-gateway can be switched and site is immutable
-
-Brave deprecated ipfs://
-https://github.com/brave/brave-browser/issues/37735
-
-- Contracts Cloned from template https://github.com/ensdomains/offchain-resolver
-
-<!-- Owner and deployer segregation -->
-
-- verifyBuild
-<!-- - executed by sequencer -->
-- generate signature
-- prefer standard contenthash resolver
-- further automate the trustless process once Protokit is able to roll up to L1 and the production EVM bridge is deployed.
+- In future, it is possible to further automate the trustless process once Protokit is able to roll up to L1 and the production EVM bridge is deployed.
 
 ## Notes
+
+### ENS resolver contract
+ - Contracts Cloned from template https://github.com/ensdomains/offchain-resolver
+ - source code of gateway is under `apps/gateway`, originally maintained at separate forked repository [ens-offchain-registrar](
+https://github.com/debuggingfuture/ens-offchain-registrar)
+
+## Trust  assumptions
+-  The demo use non-decentralized infrastructure cloudflare worker for deployment, however that is good trade-off given it is only preview but not final public websites. That could be replace by D1 compatabilie techstack such as tableland. Current fleek is used as ipfs gateway and to ease deployment & faster pinning, while it is not necessary as we could run own ipfs nodes
+
+
 
 ### ENS contract address - testnet
 
@@ -100,6 +88,13 @@ https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
   - `env-cmd pnpm run --filter @repo/gateway deploy`
 
 - Check [Logs](https://dash.cloudflare.com/c91d52c288c452ab734ede1518b00e11/workers/services/view/ens-gateway/production/logs/live)
+
+
+### References
+- [ENSIP-7: Contenthash field](https://docs.ens.domains/ensip/7)
+- [ENSIP-10: Wildcard Resolution]
+- [ERC-3668](https://eips.ethereum.org/EIPS/eip-3668#use-of-get-and-post-requests-for-the-gateway-interface)
+- [Brave deprecated ipfs://](https://github.com/brave/brave-browser/issues/37735)
 
 ## Appchain
 

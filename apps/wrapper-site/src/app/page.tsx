@@ -70,7 +70,8 @@ const wagmiConfig = createConfig({
 
       const { data: ccipData, decrypted: ipfsHash } = results;
 
-      console.log('response from gateway', ccipData, ipfsHash);
+      console.log('ccipData from gateway', ccipData);
+      console.log('decrypted ipfs hash ', ipfsHash);
 
       // we should verify with ccipdata, then redriect
       // gateway is optional
@@ -79,7 +80,6 @@ const wagmiConfig = createConfig({
 
         setTimeout(() => {
           window.location.replace(ipfsUrl);
-
         }, 30 * 1000)
       }
 
