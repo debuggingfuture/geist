@@ -1,9 +1,7 @@
-
 ## 🤖 Geist
 
 Geist is a Decentralized Autonomous Website (DAW) Builder.
 Wallet Whitelist for Private Previews, Trustless zk-proof based deployment after DAO proposal voting, we allow DAOs to collaborate at scale and make the Internet more trustless.
-
 
 ## What
 [ETHGlobal SG 24 Submission](https://ethglobal.com/showcase/geist-x3fur) | [Presentation](https://www.canva.com/design/DAGRQswuImw/flSJSrH9k9sLXKJd2LzeVg/edit?utm_content=DAGRQswuImw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
@@ -45,6 +43,8 @@ Users are required to visit gateway and sign with wallet to for access. With CCI
 - we use MACI to support users to decide which version of proposed website can be deployed.
 - A zk proof on the tally results will be generated and can be associated with the build.
 
+- we deployed a Hybrid resolver which is able to resolve both on and off chain data.
+- source code of gateway is under `apps/worker`, originally maintained at separate forked repository [ens-offchain-registrar](https://github.com/debuggingfuture/ens-offchain-registrar)
 
 ### Trustless deployment via MINA based ZK Proofs
 
@@ -57,7 +57,6 @@ Users are required to visit gateway and sign with wallet to for access. With CCI
 - We use MINA chain to verify the build to be deployed is in line with proposal, by creating merkle map and and comparing against on-chain commitment
 
 - In future, it is possible to further automate the trustless process once Protokit is able to roll up to L1 and the production EVM bridge is deployed.
-
 
 ## Notes
 
@@ -75,13 +74,17 @@ https://github.com/debuggingfuture/ens-offchain-registrar)
 
 https://docs.ens.domains/learn/deployments
 https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
+
 #### Deploy Offchain resolver
+
 - https://ccip.tools/
 
-## cf workers logs
+## Cloudflare workers logs
+
 - start
   - `env-cmd pnpm run --filter @repo/gateway dev`
 - deploy
+
   - `env-cmd pnpm run --filter @repo/gateway deploy`
 
 - Check [Logs](https://dash.cloudflare.com/c91d52c288c452ab734ede1518b00e11/workers/services/view/ens-gateway/production/logs/live)
@@ -94,6 +97,7 @@ https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
 - [Brave deprecated ipfs://](https://github.com/brave/brave-browser/issues/37735)
 
 ## Appchain
+
 - run tests
   - `env-cmd pnpm --filter @repo/chain env:inmemory test`
 - start the appchain, graphql
@@ -101,11 +105,20 @@ https://github.com/ensdomains/ens-contracts/tree/staging/deployments/sepolia
 - start the demo app
   - `env-cmd pnpm mina:env:inmemory --filter @repo/mina-demo dev`
 
+## MACI Build Voting System
+
+- `pnpm i` on the root directory.
+- `pnpm i` on the `maci-wrapper` directory.
+- `pnpm run dev` to run.
+- To generate the proofs, you can refer to MACI's [official documentation](https://maci.pse.dev/docs/quick-start/poll-finalization)
 
 ### Apps and Packages
 
 - `docs`: a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
 - `web`: another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+- `wrapper-site`: implementation of geist gateway.
+- `fun-site`: play around with them!
+- `maci-wrapper`: for the implementation of the build voting system based on the [recommended wrapper app](https://github.com/yashgo0018/maci-wrapper) by the official MACI documentation
 - `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs` applications
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
